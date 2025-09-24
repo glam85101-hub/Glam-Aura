@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import FacialAnalysis from '../facial-analysis/page';
 import MakeupRecommendations from '../makeup-recommendations/page';
+import Image from 'next/image';
 
 // Types for facial features
 interface Features {
@@ -124,21 +125,23 @@ function AnalysisPage() {
                   <p className="text-black/70 text-sm">Supports JPG, PNG, and other image formats</p>
                 </motion.div>
 
-                {selectedImage && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="relative rounded-2xl overflow-hidden"
-                  >
-                    <img
-                      src={selectedImage}
-                      alt="Uploaded"
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  </motion.div>
-                )}
-
+               {selectedImage && (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    className="relative rounded-2xl overflow-hidden"
+  >
+    <Image
+      src={selectedImage}
+      alt="Uploaded"
+      width={800}   // ✅ set width
+      height={256}  // ✅ set height (64 * 4 because Tailwind h-64 = 16rem = 256px)
+      className="w-full h-64 object-cover"
+      unoptimized   // ✅ allows blob/base64 without Next.js optimization
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+  </motion.div>
+)}
                 <Button
                   onClick={startAnalysis}
                   disabled={!selectedImage || isAnalyzing}

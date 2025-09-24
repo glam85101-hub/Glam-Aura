@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Palette, Eye, Smile, Sparkles, Heart, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
+import Image from 'next/image';
 
 // Type definitions
 interface Features {
@@ -232,11 +233,13 @@ function MakeupRecommendations({ features }: MakeupRecommendationsProps) {
               >
                 <div className="flex items-start gap-4">
                   <div className="w-16 h-16 bg-[#46c7ab] rounded-xl flex items-center justify-center flex-shrink-0">
-                    <img
-                      className="w-12 h-12 object-cover rounded-lg"
-                      alt={`${product.name} - ${product.shade}`}
-                      src="https://images.unsplash.com/photo-1635865165118-917ed9e20936"
-                    />
+                    <Image
+  src="https://images.unsplash.com/photo-1635865165118-917ed9e20936"
+  alt={`${product.name} - ${product.shade}`}
+  width={48}   // 👈 must provide width
+  height={48}  // 👈 must provide height
+  className="w-12 h-12 object-cover rounded-lg"
+/>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-black font-semibold mb-1">{product.name}</h3>
