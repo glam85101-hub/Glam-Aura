@@ -1,17 +1,15 @@
-"use client";
+'use client';
 
 import React, { useRef, useEffect } from "react";
 import * as faceapi from "face-api.js";
 
-// ✅ Unified Result Type
 export type FaceAnalysisResult = {
   skinColor: string;
-  dominantExpression: string;
+  dominantExpression?: string;
   expressions?: faceapi.FaceExpressions;
   box?: faceapi.Box;
 };
 
-// ✅ Props Type
 export interface FaceAnalyzerProps {
   running: boolean;
   onResult: (result: FaceAnalysisResult) => void;
@@ -30,24 +28,23 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult }) => {
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
       ]);
 
-      // start video
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } },
+          video: { facingMode: "user", width: 1280, height: 720, frameRate: 30 },
           audio: false,
         });
         streamRef.current = stream;
         if (videoRef.current) videoRef.current.srcObject = stream;
       } catch (err) {
         console.error("Camera error:", err);
-        onResult({ skinColor: "", dominantExpression: "Permission denied or unavailable" });
+        onResult({ skinColor: "", dominantExpression: "Permission denied" });
       }
     };
 
     loadModels();
 
     return () => {
-      if (streamRef.current) streamRef.current.getTracks().forEach((t) => t.stop());
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     };
   }, [onResult]);
 
@@ -59,14 +56,14 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult }) => {
       g += data[i + 1];
       b += data[i + 2];
     }
-    return "#" + [r, g, b].map((x) => Math.round(x / count).toString(16).padStart(2, "0")).join("");
+    return "#" + [r, g, b].map(x => Math.round(x / count).toString(16).padStart(2, "0")).join("");
   };
 
   useEffect(() => {
     if (!running) return;
+
     const interval = setInterval(async () => {
       if (!videoRef.current || !canvasRef.current) return;
-
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -76,24 +73,25 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult }) => {
         canvas.height = videoRef.current.videoHeight;
       }
 
-      const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+      const detection = await faceapi
+        .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
         .withFaceExpressions();
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (detections) {
-        const resized = faceapi.resizeResults(detections, { width: canvas.width, height: canvas.height });
+      if (detection) {
+        const resized = faceapi.resizeResults(detection, { width: canvas.width, height: canvas.height });
         const box = resized.detection.box;
 
         ctx.strokeStyle = "lime";
         ctx.lineWidth = 2;
         ctx.strokeRect(box.x, box.y, box.width, box.height);
 
-        if (box.width > 0 && box.height > 0) {
+        if (box.width && box.height) {
           const faceImage = ctx.getImageData(box.x, box.y, box.width, box.height);
           const avgColor = getAverageHexColor(faceImage.data);
 
-          const expressions = detections.expressions;
+          const expressions = detection.expressions;
           const dominant = Object.entries(expressions).sort((a, b) => b[1] - a[1])[0]?.[0] || "neutral";
 
           onResult({ skinColor: avgColor, dominantExpression: dominant, expressions, box });
@@ -112,5 +110,6 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult }) => {
       <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full" />
     </div>
   );
-}
+};
+
 export default FaceAnalyzer;
