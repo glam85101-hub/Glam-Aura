@@ -262,7 +262,7 @@ export default function MakeupRecommendations({ features }: MakeupRecommendation
       </AnimatePresence>
 
       {/* Look Complete Button */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -280,7 +280,7 @@ export default function MakeupRecommendations({ features }: MakeupRecommendation
           <Sparkles className="w-5 h-5 mr-2" />
           Try Virtual Look
         </Button>
-      </motion.div>
+      </motion.div> */}
 
       {/* Confidence Score */}
       <motion.div

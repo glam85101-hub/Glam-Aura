@@ -18,7 +18,7 @@ export default function Analysis() {
 </p>
 
           <Link
-            href="/component/face-analyzer-front"
+            href="/component/face-analyzer-front/FaceAnalyzerFront"
             className="inline-block mt-8 px-6 py-3 bg-[#5af1d0] text-white rounded-full font-medium shadow hover:bg-[#4ed4ce] transition animate-bounce"
           >
             Find your color →
