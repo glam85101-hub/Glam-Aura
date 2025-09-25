@@ -1,38 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/FaceAnalyzer";
+
+// Utility: Debounce function
+function debounce<Func extends (...args: any[]) => void>(func: Func, delay: number) {
+  let timer: NodeJS.Timeout;
+  return (...args: Parameters<Func>) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
+}
+
+// Improved skin tone mapping using perceived brightness
+export const getSkinToneDetails = (hex: string) => {
+  if (!hex) return { tone: "Unknown", season: "Unknown", suit: [], color: "#ccc" };
+
+  const bigint = parseInt(hex.replace("#", ""), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  // Perceived brightness formula
+  const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+
+  let tone = "Unknown";
+  let season = "Unknown";
+  let suit: string[] = [];
+  let color = "#ccc";
+
+  if (brightness < 85) {
+    tone = "Dark";
+    season = "Winter";
+    suit = ["Royal Blue", "Emerald Green", "Deep Purple"];
+    color = "#4b3832";
+  } else if (brightness < 125) {
+    tone = "Medium";
+    season = "Autumn";
+    suit = ["Olive", "Mustard", "Rust Orange"];
+    color = "#d2a679";
+  } else if (brightness < 160) {
+    tone = "Neutral";
+    season = "Spring";
+    suit = ["Peach", "Turquoise", "Coral"];
+    color = "#e0c097";
+  } else {
+    tone = "Light";
+    season = "Summer";
+    suit = ["Soft Pink", "Lavender", "Sky Blue"];
+    color = "#f2d6cb";
+  }
+
+  return { tone, season, suit, color };
+};
 
 export default function FaceAnalyzerPage() {
   const [result, setResult] = useState<FaceAnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [cameraEnabled, setCameraEnabled] = useState(false);
 
-  const getSkinToneDetails = (hex: string) => {
-    if (!hex) return { tone: "Unknown", season: "Unknown", suit: [], color: "#ccc" };
-
-    const bigint = parseInt(hex.replace("#", ""), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    const brightness = (r + g + b) / 3;
-
-    if (brightness < 90)
-      return { tone: "Dark", season: "Winter", suit: ["Royal Blue", "Emerald Green", "Deep Purple"], color: "#4b3832" };
-    if (brightness < 160)
-      return { tone: "Medium", season: "Autumn", suit: ["Olive", "Mustard", "Rust Orange"], color: "#d2a679" };
-    if (brightness < 200)
-      return { tone: "Neutral", season: "Spring", suit: ["Peach", "Turquoise", "Coral"], color: "#e0c097" };
-    return { tone: "Light", season: "Summer", suit: ["Soft Pink", "Lavender", "Sky Blue"], color: "#f2d6cb" };
-  };
+  // Debounced result handler
+  const handleResult = useMemo(
+    () =>
+      debounce((res: FaceAnalysisResult) => {
+        setResult(res);
+        setLoading(false);
+      }, 500),
+    []
+  );
 
   const skinDetails = result ? getSkinToneDetails(result.skinColor) : null;
 
   return (
     <section className="min-h-screen bg-[#f8f2ef] flex items-center justify-center py-8 px-4 sm:px-6">
       <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-center md:items-start w-full max-w-6xl">
-        
-        {/* Camera Left */}
+
+        {/* Camera Section */}
         <div className="relative w-full max-w-[700px] aspect-video md:h-[500px] rounded-xl overflow-hidden shadow-lg border-4 border-white flex items-center justify-center bg-black">
           {!cameraEnabled ? (
             <button
@@ -46,15 +89,9 @@ export default function FaceAnalyzerPage() {
             </button>
           ) : (
             <>
-              <FaceAnalyzer
-                running={true}
-                onResult={(res: FaceAnalysisResult) => {
-                  setResult(res);
-                  setLoading(false);
-                }}
-              />
+              <FaceAnalyzer running={true} onResult={handleResult} />
 
-              {/* Disable Camera Button */}
+              {/* Disable Camera */}
               <button
                 onClick={() => {
                   setCameraEnabled(false);
@@ -75,9 +112,10 @@ export default function FaceAnalyzerPage() {
           )}
         </div>
 
-        {/* Suggestions Right */}
+        {/* Suggestions Section */}
         <div className="bg-white rounded-xl shadow-lg p-6 w-full sm:w-[380px]">
           <h2 className="text-2xl font-bold text-[#1f1f1f] mb-4 text-center md:text-left">Analysis Result</h2>
+
           {!result ? (
             <p className="text-gray-600 italic text-center md:text-left">
               {cameraEnabled ? "Waiting for detection..." : "Please enable camera to start analysis"}
@@ -85,26 +123,52 @@ export default function FaceAnalyzerPage() {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full border" style={{ backgroundColor: skinDetails?.color }}></div>
+                <div
+                  className="w-10 h-10 rounded-full border"
+                  style={{ backgroundColor: skinDetails?.color }}
+                ></div>
                 <p className="text-lg font-semibold text-gray-800">
                   Skin Tone: <span className="font-normal">{skinDetails?.tone}</span>
                 </p>
               </div>
+
               <p className="text-lg font-semibold text-gray-800">
                 Expression: <span className="font-normal">{result.dominantExpression || "Unknown"}</span>
               </p>
+
               <p className="text-lg font-semibold text-gray-800">
                 Season Type: <span className="font-normal">{skinDetails?.season}</span>
               </p>
+
               <div>
                 <p className="text-lg font-semibold text-black mb-2">Suggested Colors:</p>
                 <div className="flex flex-wrap gap-2">
                   {skinDetails?.suit.map((c, i) => (
-                    <span key={i} className="px-3 py-1 rounded-full text-sm font-medium bg-gray-500 border">
+                    <span
+                      key={i}
+                      className="px-3 py-1 rounded-full text-sm font-medium border bg-gray-200"
+                    >
                       {c}
                     </span>
                   ))}
                 </div>
+              </div>
+
+              {/* Theme button */}
+              <div className="mt-4">
+                <button
+                  className={`inline-block px-6 py-3 rounded-full font-medium shadow transition animate-bounce ${
+                    skinDetails?.tone === "Dark"
+                      ? "bg-[#5af1d0] text-white hover:bg-[#49d3c0]"
+                      : skinDetails?.tone === "Medium"
+                      ? "bg-[#f1b75a] text-white hover:bg-[#d39e49]"
+                      : skinDetails?.tone === "Neutral"
+                      ? "bg-[#e0c097] text-white hover:bg-[#c8aa82]"
+                      : "bg-[#f2d6cb] text-white hover:bg-[#e0bfb0]"
+                  }`}
+                >
+                  Explore Suggestions
+                </button>
               </div>
             </div>
           )}
