@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import * as faceapi from "face-api.js";
 
+// ✅ Unified Result Type
 export type FaceAnalysisResult = {
   skinColor: string;
   dominantExpression: string;
@@ -10,13 +11,13 @@ export type FaceAnalysisResult = {
   box?: faceapi.Box;
 };
 
-export default function FaceAnalyzer({
-  running,
-  onResult,
-}: {
+// ✅ Props Type
+export interface FaceAnalyzerProps {
   running: boolean;
-  onResult: (res: FaceAnalysisResult) => void;
-}) {
+  onResult: (result: FaceAnalysisResult) => void;
+}
+
+const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -112,3 +113,4 @@ export default function FaceAnalyzer({
     </div>
   );
 }
+export default FaceAnalyzer;

@@ -1,12 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import FaceAnalyzer from "../face-analyzer-func/page";
-
-type FaceAnalysisResult = {
-  skinColor: string;
-  dominantExpression?: string;
-};
+import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/FaceAnalyzer";
 
 export default function FaceAnalyzerPage() {
   const [result, setResult] = useState<FaceAnalysisResult | null>(null);
