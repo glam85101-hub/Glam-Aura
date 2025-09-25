@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Upload, Sparkles, Eye, Smile, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import FacialAnalysis from '../facial-analysis/page';
+import FacialAnalysis from '../facial-analysis/FacialAnalysis';
 import MakeupRecommendations from '../makeup-recommendations/page';
 import Image from 'next/image';
 
