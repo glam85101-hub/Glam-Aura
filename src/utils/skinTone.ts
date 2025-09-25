@@ -24,13 +24,25 @@ export const getSkinToneDetails = (hex: string) => {
   let color = "#ccc";
 
   if (brightness < 85) {
-    tone = "Dark"; season = "Winter"; suit = ["Royal Blue", "Emerald Green", "Deep Purple"]; color = "#4b3832";
+    tone = "Dark";
+    season = "Winter";
+    suit = ["Royal Blue", "Emerald Green", "Deep Purple"];
+    color = "#4b3832";
   } else if (brightness < 125) {
-    tone = "Medium"; season = "Autumn"; suit = ["Olive", "Mustard", "Rust Orange"]; color = "#d2a679";
+    tone = "Medium";
+    season = "Autumn";
+    suit = ["Olive", "Mustard", "Rust Orange"];
+    color = "#d2a679";
   } else if (brightness < 160) {
-    tone = "Neutral"; season = "Spring"; suit = ["Peach", "Turquoise", "Coral"]; color = "#e0c097";
+    tone = "Neutral";
+    season = "Spring";
+    suit = ["Peach", "Turquoise", "Coral"];
+    color = "#e0c097";
   } else {
-    tone = "Light"; season = "Summer"; suit = ["Soft Pink", "Lavender", "Sky Blue"]; color = "#f2d6cb";
+    tone = "Light";
+    season = "Summer";
+    suit = ["Soft Pink", "Lavender", "Sky Blue"];
+    color = "#f2d6cb";
   }
 
   return { tone, season, suit, color };
