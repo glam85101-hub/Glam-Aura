@@ -5,7 +5,7 @@ import { Camera, Upload, Sparkles, Eye, Smile, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import FacialAnalysis from '../facial-analysis/FacialAnalysis';
-import MakeupRecommendations from '../makeup-recommendations/page';
+import MakeupRecommendations from '../makeup-recommendations/MakeupRecommendations';
 import Image from 'next/image';
 
 // Types for facial features
