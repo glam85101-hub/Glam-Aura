@@ -1,60 +1,57 @@
-import type { NextRequest } from 'next/server';
+import type { NextRequest } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
     const { image_b64, note } = await req.json();
     if (!image_b64) {
-      return new Response(JSON.stringify({ error: 'Image required' }), { status: 400 });
+      return new Response(JSON.stringify({ error: "Image required" }), { status: 400 });
     }
 
     const system = `You are a fashion stylist. Analyze the outfit in the input image.
 - Rate from 0-100.
-- Return JSON only with keys: verdict (short text only), summary, strengths[], fixes[], colorPalette[{name,hex}], score (number only), suggestedPieces[].
-- Palette must be limited to tasteful shades in white/green/blue families.`;
+- Return JSON only with keys: verdict (short text only), summary, strengths[], fixes[], colorPalette[{name,hex}], score (number only), suggestedPieces[].`;
 
+    const userNote = note ? `Context: ${note}` : "";
 
-    const userNote = note ? `Context: ${note}` : '';
+    // ✅ Use gemini-2.0-flash (latest supported)
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: system },
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: userNote },
-              {
-                type: 'image_url',
-                image_url: { url: `data:image/jpeg;base64,${image_b64}` }, // ✅ FIXED
+    // Gemini expects array of "parts" (text + inlineData for images)
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: `${system}\n${userNote}` },
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: image_b64,
               },
-            ],
-          },
-        ],
-      }),
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.7,
+        responseMimeType: "application/json", // ✅ Forces JSON
+      },
     });
 
-    if (!response.ok) {
-      const t = await response.text();
-      return new Response(JSON.stringify({ error: t }), { status: 500 });
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
-    const analysis = JSON.parse(content || '{}');
+    const output = result.response.text(); // Already a JSON string
+    const analysis = JSON.parse(output);
 
     return new Response(JSON.stringify({ analysis }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message || 'Server error' }), { status: 500 });
+    return new Response(
+      JSON.stringify({ error: err.message || "Server error" }),
+      { status: 500 }
+    );
   }
 }

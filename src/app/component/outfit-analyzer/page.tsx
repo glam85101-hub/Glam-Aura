@@ -122,9 +122,18 @@ export default function OutfitAnalyzerPage() {
             </div>
 
             <div className="mt-4 flex gap-3">
-              <button onClick={analyze} disabled={loading || !fileB64} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#46c7ab] to-[#2a7968] py-2 text-white disabled:opacity-50">
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Analyze Outfit
-              </button>                                           
+              <button
+                onClick={analyze}
+                disabled={loading || !fileB64}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#46c7ab] to-[#2a7968] px-4 py-2 text-white disabled:opacity-50"
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4" />
+                )}{' '}
+                Analyze Outfit
+              </button>                
               <button onClick={reset} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 hover:bg-slate-50">
                 <Shirt className="h-4 w-4" /> Reset
               </button>
@@ -139,7 +148,7 @@ export default function OutfitAnalyzerPage() {
             </div>
 
             {!analysis ? (
-              <p className="mt-4 text-slate-600 text-sm">Upload a photo and hit Analyze. The AI will rate your fit and suggest a palette</p>
+              <p className="mt-4 text-slate-600 text-sm">Upload a photo and hit Analyze. The AI will evaluate your look.</p>
             ) : (
               <div className="mt-4 space-y-4">
                 <div className="flex items-center justify-between rounded-xl border bg-white p-3">

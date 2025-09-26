@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import AnalysisPage from "../analysis/page";
+
 
 export default function Pallete() {
   return (
@@ -27,7 +27,7 @@ As the centerpiece of our beauty-tech application, the Analysis Page seamlessly 
    
           </p>
           <Link
-            href="/component/analysis"
+            href="/component/makeup-recommendations"
             className="inline-block mt-8 px-6 py-3 bg-[#5af1d0] text-white rounded-full font-medium shadow hover:bg-[#49d3c0] transition animate-bounce"
           >
             Try it →
