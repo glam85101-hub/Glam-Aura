@@ -36,8 +36,8 @@ export default function Footer() {
       links: [
         { label: "About Us", href: "https://www.linkedin.com/in/glam-aura-087205387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
         { label: "Contact", href: "/component/contact" },
-        { label: "Privacy Policy", href: "/privacy-policy" },
-        { label: "Terms", href: "/terms" },
+        { label: "Privacy Policy", href: "/component/privacy-policy" },
+        { label: "Terms", href: "/component/terms-and-conditions" },
       ],
     },
   ].map((section, i) => (
