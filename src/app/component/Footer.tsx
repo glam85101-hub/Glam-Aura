@@ -35,7 +35,7 @@ export default function Footer() {
       title: "Company",
       links: [
         { label: "About Us", href: "https://www.linkedin.com/in/glam-aura-087205387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
-        { label: "Contact", href: "/contact" },
+        { label: "Contact", href: "/component/contact" },
         { label: "Privacy Policy", href: "/privacy-policy" },
         { label: "Terms", href: "/terms" },
       ],
@@ -68,7 +68,7 @@ export default function Footer() {
             </h2>
             <div className="flex space-x-4 justify-center md:justify-start">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/glamaura387/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-pink-600 text-2xl"
@@ -76,7 +76,7 @@ export default function Footer() {
                 <FaInstagram />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/HumemaA44967"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-blue-400 text-2xl"
@@ -84,7 +84,7 @@ export default function Footer() {
                 <FaTwitter />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61581457560218"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-blue-600 text-2xl"

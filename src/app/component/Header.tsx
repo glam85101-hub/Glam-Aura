@@ -30,12 +30,13 @@ export default function Header() {
           <Link href="/component/features" className="hover:underline">
             Features
           </Link>
-           <Link href="/component/faq" className="hover:underline">
-            FAQ
-          </Link>
            <Link href="/component/pricing" className="hover:underline">
             Pricing
           </Link>
+           <Link href="/component/contact" className="hover:underline">
+            Contact
+          </Link>
+
 
           {/* Clerk Auth Section */}
           <SignedOut>

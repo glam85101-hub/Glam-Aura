@@ -11,6 +11,7 @@ import About from "../app/component/about/page";
 import Footer from "./component/Footer";
 import Header from "./component/Header";
 import ColorAnalysis from "./component/ColorAnalysis";
+import FAQ from "./component/faq/page";
  
  
 
@@ -35,8 +36,8 @@ export default function Home(){
  <About />
  <Outfit/>
   <Blog />
-
- <Analysis />
+<Analysis />
+ <FAQ/>
   
  </div>
   );
