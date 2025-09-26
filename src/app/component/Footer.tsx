@@ -28,12 +28,13 @@ export default function Footer() {
         { label: "How it works", href: "/component/about" },
         { label: "Features", href: "/component/features" },
         { label: "FAQ", href: "/component/faq" },
+        { label: "Pricing", href: "/component/pricing" },
       ],
     },
     {
       title: "Company",
       links: [
-        { label: "About Us", href: "/about" },
+        { label: "About Us", href: "https://www.linkedin.com/in/glam-aura-087205387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
         { label: "Contact", href: "/contact" },
         { label: "Privacy Policy", href: "/privacy-policy" },
         { label: "Terms", href: "/terms" },
@@ -91,7 +92,7 @@ export default function Footer() {
                 <FaFacebook />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/glam-aura-087205387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-blue-700 text-2xl"
