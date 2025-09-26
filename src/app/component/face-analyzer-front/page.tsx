@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import FaceAnalyzer, { FaceAnalysisResult } from "@/app/component/face-analyzer-func/page";
+import FaceAnalyzer, { FaceAnalysisResult } from "@/app/component/face-analyzer-func/FaceAnalyer";
 
 import { Droplet, Smile, Sun } from "lucide-react";
 
