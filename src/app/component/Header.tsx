@@ -33,6 +33,9 @@ export default function Header() {
            <Link href="/component/faq" className="hover:underline">
             FAQ
           </Link>
+           <Link href="/component/pricing" className="hover:underline">
+            Pricing
+          </Link>
 
           {/* Clerk Auth Section */}
           <SignedOut>
