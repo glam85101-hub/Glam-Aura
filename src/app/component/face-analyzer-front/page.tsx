@@ -1,130 +1,143 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/FaceAnalyzer";
-import { debounce, getSkinToneDetails } from "@/utils/skinTone";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/page";
+import { Droplet, Smile, Sun } from "lucide-react";
+
 
 export default function FaceAnalyzerPage() {
-  const [result, setResult] = useState<FaceAnalysisResult | null>(null);
-  const [loading, setLoading] = useState(false);
   const [cameraEnabled, setCameraEnabled] = useState(false);
+  const [result, setResult] = useState<FaceAnalysisResult | null>(null);
+  const [showColors, setShowColors] = useState(false);
 
-  // Debounced result handler
-  const handleResult = useMemo(
-    () =>
-      debounce((res: FaceAnalysisResult) => {
-        setResult(res);
-        setLoading(false);
-      }, 500),
-    []
-  );
+  const streamRef = useRef<MediaStream | null>(null);
 
-  const skinDetails = result ? getSkinToneDetails(result.skinColor) : null;
+  const handleEnableCamera = () => setCameraEnabled(true);
 
+  const handleDisableCamera = () => {
+    setCameraEnabled(false);
+    setResult(null);
+    setShowColors(false);
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+  };
+
+  const handleResetResults = () => {
+    setResult(null);
+    setShowColors(false);
+  };
 
   return (
-    <section className="min-h-screen bg-[#f8f2ef] flex items-center justify-center py-8 px-4 sm:px-6">
-      <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-center md:items-start w-full max-w-6xl">
+    <div className="min-h-screen bg-gradient-to-br from-[#2eceab] via-white to-[#4ea893] flex flex-col items-center p-6">
+      {/* Animated Title */}
+      <header className="flex items-center justify-center mb-8">
+        <motion.h1
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-3xl md:text-4xl font-bold tracking-tight text-[#1f1f1f]"
+        >
+          Facial Feature <span className="text-[#46c7ab]">Analyzer</span>
+        </motion.h1>
+      </header>
 
+      {/* Main content: Camera + Results */}
+      <div className="flex flex-col md:flex-row w-full max-w-6xl gap-8 md:gap-10">
         {/* Camera Section */}
-        <div className="relative w-full max-w-[700px] aspect-video md:h-[500px] rounded-xl overflow-hidden shadow-lg border-4 border-white flex items-center justify-center bg-black">
+        <div className="relative w-full md:w-2/3 aspect-video rounded-xl overflow-hidden shadow-lg border-4 border-white bg-black flex items-center justify-center">
           {!cameraEnabled ? (
             <button
-              onClick={() => {
-                setCameraEnabled(true);
-                setLoading(true);
-              }}
-              className="px-6 py-3 bg-[#52d8bb] text-white font-semibold rounded-xl shadow hover:bg-[#48c0a6] transition"
+              onClick={handleEnableCamera}
+              className="px-6 py-3 bg-[#52d8bb] text-white font-semibold rounded-xl shadow hover:bg-[#48c0a6]"
             >
               Enable Camera
             </button>
           ) : (
             <>
-              <FaceAnalyzer running={true} onResult={handleResult} />
-
-              {/* Disable Camera */}
+              <FaceAnalyzer
+                running={true}
+                onResult={setResult}
+                streamRef={streamRef}
+              />
               <button
-                onClick={() => {
-                  setCameraEnabled(false);
-                  setResult(null);
-                  setLoading(false);
-                }}
-                className="absolute bottom-4 right-4 px-6 py-3 bg-[#52d8bb] text-white font-semibold rounded-xl shadow hover:bg-[#48c0a6] transition"
+                onClick={handleDisableCamera}
+                className="absolute bottom-4 right-4 px-6 py-3 bg-[#52d8bb] text-white font-semibold rounded-xl shadow hover:bg-[#48c0a6]"
               >
                 Disable Camera
               </button>
+            </>
+          )}
+        </div>
 
-              {loading && (
-                <div className="absolute top-2 left-2 bg-white px-3 py-1 rounded shadow">
-                  <p className="text-sm font-medium text-gray-700">Analyzing... Please wait</p>
+        {/* Analysis Section */}
+        <div className="bg-white rounded-xl shadow-lg p-6 md:w-1/3 flex flex-col">
+          {!result ? (
+            <p className="text-gray-600 text-center md:text-left mt-4">
+              {cameraEnabled
+                ? "Waiting for analysis..."
+                : "Enable the camera to start analysis."}
+            </p>
+          ) : (
+            <>
+{/* Feature Display with Icons */}
+<p className="text-lg font-semibold flex items-center gap-2">
+  <Droplet className="w-5 h-5 text-[#52d8bb]" />
+  Skin Tone: <span className="font-normal">{result.tone}</span>
+</p>
+
+<p className="text-lg font-semibold flex items-center gap-2">
+  <Smile className="w-5 h-5 text-[#facc15]" />
+  Expression: <span className="font-normal">{result.dominantExpression}</span>
+</p>
+
+<p className="text-lg font-semibold flex items-center gap-2">
+  <Sun className="w-5 h-5 text-[#f97316]" />
+  Season: <span className="font-normal">{result.season}</span>
+</p>
+
+{/* Dynamic description from Gemini */}
+{result.description && (
+  <p className="mt-2 text-gray-700 italic">{result.description}</p>
+)}
+
+
+              {/* Buttons */}
+              <div className="flex flex-col gap-3 mt-4">
+                <button
+                  onClick={() => setShowColors(!showColors)}
+                  className="px-6 py-3 rounded-full font-medium shadow bg-[#52d8bb] text-white hover:bg-[#48c0a6] transition"
+                >
+                  {showColors ? "Hide Colors" : "Explore Colors"}
+                </button>
+
+                <button
+                  onClick={handleResetResults}
+                  className="px-6 py-3 rounded-full font-medium shadow bg-[#032c23] text-white hover:bg-[#48c0a6] transition "
+                >
+                  Reset Results
+                </button>
+              </div>
+
+              {/* Show color suggestions */}
+              {showColors && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {result.suit.map((color, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 rounded-full text-sm font-medium border bg-gray-200"
+                    >
+                      {color}
+                    </span>
+                  ))}
                 </div>
               )}
             </>
           )}
         </div>
-
-        {/* Suggestions Section */}
-        <div className="bg-white rounded-xl shadow-lg p-6 w-full sm:w-[380px]">
-          <h2 className="text-2xl font-bold text-[#1f1f1f] mb-4 text-center md:text-left">Analysis Result</h2>
-
-          {!result ? (
-            <p className="text-gray-600 italic text-center md:text-left">
-              {cameraEnabled ? "Waiting for detection..." : "Please enable camera to start analysis"}
-            </p>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-full border"
-                  style={{ backgroundColor: skinDetails?.color }}
-                ></div>
-                <p className="text-lg font-semibold text-gray-800">
-                  Skin Tone: <span className="font-normal">{skinDetails?.tone}</span>
-                </p>
-              </div>
-
-              <p className="text-lg font-semibold text-gray-800">
-                Expression: <span className="font-normal">{result.dominantExpression || "Unknown"}</span>
-              </p>
-
-              <p className="text-lg font-semibold text-gray-800">
-                Season Type: <span className="font-normal">{skinDetails?.season}</span>
-              </p>
-
-              <div>
-                <p className="text-lg font-semibold text-black mb-2">Suggested Colors:</p>
-                <div className="flex flex-wrap gap-2">
-                  {skinDetails?.suit.map((c, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 rounded-full text-sm font-medium border bg-gray-200"
-                    >
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Theme button */}
-              <div className="mt-4">
-                <button
-                  className={`inline-block px-6 py-3 rounded-full font-medium shadow transition animate-bounce ${
-                    skinDetails?.tone === "Dark"
-                      ? "bg-[#5af1d0] text-white hover:bg-[#49d3c0]"
-                      : skinDetails?.tone === "Medium"
-                      ? "bg-[#f1b75a] text-white hover:bg-[#d39e49]"
-                      : skinDetails?.tone === "Neutral"
-                      ? "bg-[#e0c097] text-white hover:bg-[#c8aa82]"
-                      : "bg-[#f2d6cb] text-white hover:bg-[#e0bfb0]"
-                  }`}
-                >
-                  Explore Suggestions
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
-    </section>
+    </div>
   );
 }
