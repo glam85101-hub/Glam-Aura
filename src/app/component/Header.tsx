@@ -90,11 +90,12 @@ export default function Header() {
         </div>
 
         {/* Mobile Dropdown Menu */}
-        <div
-          className={`md:hidden fixed top-16 left-0 w-full bg-[#46c7ab]/95 overflow-auto transition-all duration-300 z-50 ${
-            isOpen ? "max-h-[calc(100vh-4rem)] py-4" : "max-h-0 py-0"
-          }`}
-        >
+       <div
+  className={`md:hidden fixed top-16 left-0 w-full bg-[#46c7ab]/95 overflow-auto transition-all duration-300 z-50 ${
+    isOpen ? "max-h-[calc(100vh-4rem)] py-4 px-4" : "max-h-0 py-0 px-0"
+  }`}
+>
+
           <div className="flex flex-col items-center gap-6 text-white text-lg px-4">
             {links.map((link) => (
               <Link

@@ -98,19 +98,20 @@ export default function ColorAnalysis() {
 
   return (
     <section className="relative text-gray-600 body-font bg-black overflow-hidden">
-      {/* 3D Background */}
-      <div className="absolute inset-0 z-0 w-full h-full">
-        <Canvas camera={{ position: [0, 1.5, 3], fov: 60 }}>
-          <ambientLight intensity={0.8} />
-          <directionalLight position={[2, 3, 2]} intensity={1} />
-          <WavePlane />
-          <Particles />
-          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
-        </Canvas>
-      </div>
+     {/* 3D Background */}
+<div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
+  <Canvas camera={{ position: [0, 1.5, 3], fov: 60 }}>
+    <ambientLight intensity={0.8} />
+    <directionalLight position={[2, 3, 2]} intensity={1} />
+    <WavePlane />
+    <Particles />
+    <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+  </Canvas>
+</div>
+
 
       {/* Foreground Content */}
-      <div className="relative z-10 container px-4 sm:px-6 lg:px-20 py-16 mx-auto">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-16 max-w-full overflow-hidden">
         {/* Heading */}
         <div className="text-center mb-12">
           <h1 className="text-3xl mt-20 sm:text-4xl md:text-5xl font-bold text-white">
