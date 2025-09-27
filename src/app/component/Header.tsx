@@ -60,6 +60,7 @@ export default function Header() {
           </SignedIn>
           <button
             onClick={toggleMenu}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
             className="flex flex-col justify-between w-6 h-5 focus:outline-none"
           >
             <span
@@ -83,12 +84,11 @@ export default function Header() {
 
       {/* Mobile Dropdown Menu */}
       <div
-  className={`md:hidden bg-[#46c7ab]/95 transition-max-height duration-500 overflow-hidden ${
-    isOpen ? "max-h-[100vh] p-4 z-30" : "max-h-0 p-0"
-  }`}
->
-
-        <div className="flex flex-col items-center py-4 gap-4 text-white text-lg">
+        className={`md:hidden bg-[#46c7ab]/95 transition-max-height duration-500 overflow-hidden w-full fixed top-16 left-0 z-30 ${
+          isOpen ? "max-h-[100vh] p-4 min-h-[100vh]" : "max-h-0 p-0"
+        }`}
+      >
+        <div className="flex flex-col items-center gap-6 text-white text-lg">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -103,7 +103,7 @@ export default function Header() {
           <SignedOut>
             <SignInButton mode="modal">
               <button
-                className="px-4 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition"
+                className="px-6 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition"
                 onClick={() => setIsOpen(false)}
               >
                 Sign In
@@ -111,7 +111,7 @@ export default function Header() {
             </SignInButton>
             <SignUpButton mode="modal">
               <button
-                className="px-4 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition"
+                className="px-6 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition"
                 onClick={() => setIsOpen(false)}
               >
                 Sign Up
