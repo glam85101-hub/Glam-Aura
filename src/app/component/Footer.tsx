@@ -1,27 +1,10 @@
+"use client";
+
 import { CgGirl } from "react-icons/cg";
 import { FaInstagram, FaTwitter, FaFacebook, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
-  return (
-    <footer className="text-gray-600 body-font bg-[#f8f2ef]">
-      <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-        
-        {/* Logo + Short Intro */}
-        <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left md:mt-0 mt-10">
-          <p className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-            <CgGirl className="text-2xl" />
-            <span className="ml-3 text-xl font-semibold">Personal Styling</span>
-          </p>
-          <p className="mt-2 text-sm text-gray-500">
-            AI-powered personal styling — helping you discover the clothing
-            styles and colors that truly bring out your best look.
-          </p>
-        </div>
-
-        {/* Footer Links */}
-        <div className="flex-grow flex flex-wrap md:pr-20 -mb-10 md:text-left text-center order-first">
-          {
-  [
+  const sections = [
     {
       title: "Product",
       links: [
@@ -34,79 +17,82 @@ export default function Footer() {
     {
       title: "Company",
       links: [
-        { label: "About Us", href: "https://www.linkedin.com/in/glam-aura-087205387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+        { label: "About Us", href: "https://www.linkedin.com/in/glam-aura-087205387" },
         { label: "Contact", href: "/component/contact" },
         { label: "Privacy Policy", href: "/component/privacy-policy" },
         { label: "Terms", href: "/component/terms-and-conditions" },
       ],
     },
-  ].map((section, i) => (
-    <div key={i} className="lg:w-1/4 md:w-1/2 w-full px-4">
-      <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-        {section.title}
-      </h2>
-      <nav className="list-none mb-10">
-        {section.links.map((link, idx) => (
-          <li key={idx}>
-            <a
-              href={link.href}
-              className="text-gray-600 hover:text-gray-800 cursor-pointer"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </nav>
-    </div>
-  ))
-}
+    {
+      title: "Follow Us",
+      social: [
+        { icon: <FaInstagram />, href: "https://www.instagram.com/glamaura387/" },
+        { icon: <FaTwitter />, href: "https://x.com/HumemaA44967" },
+        { icon: <FaFacebook />, href: "https://www.facebook.com/profile.php?id=61581457560218" },
+        { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/glam-aura-087205387" },
+      ],
+    },
+  ];
 
-          {/* Social Links Section */}
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              Follow Us
-            </h2>
-            <div className="flex space-x-4 justify-center md:justify-start">
-              <a
-                href="https://www.instagram.com/glamaura387/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-pink-600 text-2xl"
-              >
-                <FaInstagram />
-              </a>
-              <a
-                href="https://x.com/HumemaA44967"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-400 text-2xl"
-              >
-                <FaTwitter />
-              </a>
-              <a
-                href="https://www.facebook.com/profile.php?id=61581457560218"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-600 text-2xl"
-              >
-                <FaFacebook />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/glam-aura-087205387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-700 text-2xl"
-              >
-                <FaLinkedin />
-              </a>
+  return (
+    <footer className="text-gray-600 body-font bg-[#f8f2ef]">
+      <div className="container px-5 py-12 mx-auto flex flex-wrap md:flex-nowrap md:items-start items-center">
+        {/* Logo + Intro */}
+        <div className="w-full md:w-64 flex-shrink-0 text-center md:text-left mb-10 md:mb-0 md:mr-16">
+          <p className="flex title-font font-medium items-center justify-center md:justify-start text-gray-900">
+            <CgGirl className="text-2xl" />
+            <span className="ml-3 text-xl font-semibold">Personal Styling</span>
+          </p>
+          <p className="mt-2 text-sm text-gray-500">
+            AI-powered personal styling — helping you discover the clothing
+            styles and colors that truly bring out your best look.
+          </p>
+        </div>
+
+        {/* Footer Links + Social */}
+        <div className="flex flex-1 justify-between flex-wrap gap-6">
+          {sections.map((section, idx) => (
+            <div key={idx} className="w-1/2 sm:w-auto px-2 md:px-4">
+              <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
+                {section.title}
+              </h2>
+              {section.links && (
+                <nav className="list-none">
+                  {section.links.map((link, i) => (
+                    <li key={i}>
+                      <a
+                        href={link.href}
+                        className="text-gray-600 hover:text-gray-800 cursor-pointer text-sm sm:text-base"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </nav>
+              )}
+              {section.social && (
+                <div className="flex space-x-4">
+                  {section.social.map((s, i) => (
+                    <a
+                      key={i}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-blue-500 text-2xl"
+                    >
+                      {s.icon}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="bg-gray-100">
-        <div className="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+        <div className="container mx-auto py-4 px-5 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
           <p className="text-gray-500 text-sm text-center sm:text-left">
             © 2025 Made by Humema & Faria — Personal Styling Platform
           </p>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Analysis from "../Analysis";
+import Analysis from "../skin-analyzer/page";
 import Outfit from "../outfit/page";
 import Pallete from "../makeup/page";
 

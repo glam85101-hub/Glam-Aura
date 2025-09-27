@@ -12,7 +12,7 @@ export default function Analysis() {
             Color Analysis
           </h2>
           <p className="mt-4 text-lg text-[#444] leading-relaxed">
-            You’re one selfie away from seeing your personalized color palette.
+            You&rsquo;re one selfie away from seeing your personalized color palette.
             Our smart science will analyze your features and reveal the colors
             that will best enhance your natural beauty.
           </p>

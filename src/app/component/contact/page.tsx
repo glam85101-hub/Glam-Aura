@@ -51,17 +51,23 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-[#f8f2ef] text-black relative overflow-hidden px-4">
-      {/* HEADER */}
-      <header className="flex items-center justify-center pt-16 mb-12">
-        <motion.h1
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-center border-b-4 border-[#46c7ab] pb-2"
-        >
-          Get in <span className="text-[#46c7ab]">Touch</span>
-        </motion.h1>
-      </header>
+<header className="text-center mb-16 mt-20">
+  <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-2">
+    CONTACT US
+  </h2>
+  <motion.h1
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="title-font text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900"
+  >
+    Get in <span className="text-[#5af1d0]">Touch</span>
+  </motion.h1>
+  <p className="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+    Have a question or want to work with us? Send us a message and we'll get back to you soon.
+  </p>
+</header>
+
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
         {/* Left Side - Social Links */}

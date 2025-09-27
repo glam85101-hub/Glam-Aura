@@ -1,5 +1,5 @@
 "use client"
-import Analysis from "../app/component/Analysis";
+import Analysis from "../app/component/skin-analyzer/page";
 import Outfit from "../app/component/outfit/page";
 import Pallete from "../app/component/makeup/page";
 import AOS from "aos";

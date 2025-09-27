@@ -56,21 +56,24 @@ const Pricing: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#f8f2ef]">
          <main className="max-w-6xl mx-auto p-10 text-gray-900">
-      {/* HEADER */}
-      <header className="flex flex-col items-center justify-center mb-12 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-3xl md:text-4xl font-bold tracking-tight mb-3"
-        >
-          Style <span className="text-[#46c7ab]">Plans</span>
-        </motion.h1>
+{/* HEADER */}
+<header className="text-center mb-16 mt-12 md:mt-16">
+  <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-2">
+    OUR PLANS
+  </h2>
+  <motion.h1
+    initial={{ opacity: 0, y: -8 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4 }}
+    className="title-font text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900"
+  >
+    Style <span className="text-[#5af1d0]">Plans</span>
+  </motion.h1>
+  <p className="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+    Choose a plan that fits your style needs — from a quick style check to full personalized guidance.
+  </p>
+</header>
 
-        <p className="text-gray-500 max-w-xl">
-          Choose a plan that fits your style needs — from a quick style check to full personalized guidance.
-        </p>
-      </header>
 
       {/* PRICING CARDS */}
       <div className="flex flex-wrap justify-center gap-6">
