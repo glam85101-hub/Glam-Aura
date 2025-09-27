@@ -64,7 +64,7 @@ export default function Contact() {
     Get in <span className="text-[#5af1d0]">Touch</span>
   </motion.h1>
   <p className="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
-    Have a question or want to work with us? Send us a message and we'll get back to you soon.
+    Have a question or want to work with us? Send us a message and we&#39;ll get back to you soon.
   </p>
 </header>
 
