@@ -1,19 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname(); // Track route changes
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    // Close mobile menu when route changes
+    setIsOpen(false);
+  }, [pathname]);
 
   const links = [
     { label: "Home", href: "/" },
@@ -24,9 +23,8 @@ export default function Header() {
   ];
 
   return (
-    <nav className="bg-[#46c7ab]/95 w-full border-b border-[#33353F] fixed top-0 left-0 z-20">
+    <nav className="bg-[#46c7ab]/95 w-full border-b border-[#33353F] fixed top-0 left-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
-        {/* Logo */}
         <div className="text-2xl font-bold text-white">Personal Styling</div>
 
         {/* Desktop Links */}
@@ -59,7 +57,7 @@ export default function Header() {
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
           <button
-            onClick={toggleMenu}
+            onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Close menu" : "Open menu"}
             className="flex flex-col justify-between w-6 h-5 focus:outline-none"
           >
@@ -82,43 +80,42 @@ export default function Header() {
         </div>
       </div>
 
-     {/* Mobile Dropdown Menu */}
-<div
-  className={`md:hidden bg-[#46c7ab]/95 transition-all duration-500 overflow-hidden w-full ${
-    isOpen ? "max-h-screen py-4" : "max-h-0 py-0"
-  }`}
->
-  <div className="flex flex-col items-center gap-6 text-white text-lg">
-    {links.map((link) => (
-      <Link
-        key={link.href}
-        href={link.href}
-        className="hover:underline"
-        onClick={() => setIsOpen(false)}
+      {/* Mobile Dropdown */}
+      <div
+        className={`md:hidden bg-[#46c7ab]/95 overflow-hidden transition-max-height duration-500 ${
+          isOpen ? "max-h-screen py-4" : "max-h-0 py-0"
+        }`}
       >
-        {link.label}
-      </Link>
-    ))}
-
-    <SignedOut>
-      <SignInButton mode="modal">
-        <button
-          className="px-6 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition"
-          onClick={() => setIsOpen(false)}
-        >
-          Sign In
-        </button>
-      </SignInButton>
-      <SignUpButton mode="modal">
-        <button
-          className="px-6 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition"
-          onClick={() => setIsOpen(false)}
-        >
-          Sign Up
-        </button>
-      </SignUpButton>
-    </SignedOut>
-  </div>
+        <div className="flex flex-col items-center gap-6 text-white text-lg">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="hover:underline"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button
+                className="px-6 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button
+                className="px-6 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+        </div>
       </div>
     </nav>
   );
