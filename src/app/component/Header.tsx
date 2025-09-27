@@ -82,43 +82,43 @@ export default function Header() {
       </div>
 
       {/* Mobile Dropdown Menu */}
-      <div
-        className={`md:hidden bg-[#46c7ab]/95 transition-max-height duration-500 overflow-hidden ${
-          isOpen ? "max-h-screen" : "max-h-0"
-        }`}
+<div
+  className={`md:hidden bg-[#46c7ab]/95 transition-all duration-500 ${
+    isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+  } overflow-hidden`}
+>
+  <div className="flex flex-col items-center py-4 gap-4 text-white text-lg">
+    {links.map((link) => (
+      <Link
+        key={link.href}
+        href={link.href}
+        className="hover:underline"
+        onClick={() => setIsOpen(false)}
       >
-        <div className="flex flex-col items-center py-4 gap-4 text-white text-lg">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="hover:underline"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+        {link.label}
+      </Link>
+    ))}
 
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button
-                className="px-4 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign In
-              </button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <button
-                className="px-4 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign Up
-              </button>
-            </SignUpButton>
-          </SignedOut>
-        </div>
-      </div>
+    <SignedOut>
+      <SignInButton mode="modal">
+        <button
+          className="px-4 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition"
+          onClick={() => setIsOpen(false)}
+        >
+          Sign In
+        </button>
+      </SignInButton>
+      <SignUpButton mode="modal">
+        <button
+          className="px-4 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition"
+          onClick={() => setIsOpen(false)}
+        >
+          Sign Up
+        </button>
+      </SignUpButton>
+    </SignedOut>
+  </div>
+</div>
     </nav>
   );
 }
