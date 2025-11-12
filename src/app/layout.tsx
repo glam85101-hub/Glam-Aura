@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import Footer from "../app/component/Footer";
 import Header from "../app/component/Header";
+import RegisterClient from "../app/component/RegisterClient";
 
 import {
   ClerkProvider,
@@ -40,6 +41,8 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
+                <RegisterClient /> 
+
         <Header />
         {children}
         <Footer/>

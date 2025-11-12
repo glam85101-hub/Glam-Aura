@@ -1,4 +1,3 @@
-// /app/api/face-analyze/route.ts
 import type { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
