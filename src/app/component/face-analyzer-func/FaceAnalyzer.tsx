@@ -98,7 +98,7 @@ useEffect(() => {
         autoPlay
         muted
         playsInline
-        className="rounded-xl w-full h-full object-cover"
+        className="rounded-xl w-full h-full object-cover transform -scale-x-100"
       />
       <canvas ref={canvasRef} className="hidden" />
     </div>
