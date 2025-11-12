@@ -93,13 +93,13 @@ useEffect(() => {
 
   return (
     <div className="relative w-full h-full">
-     <video
-  ref={videoRef}
-  autoPlay
-  playsInline
-  className="transform -scale-x-100"
-/>
-
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        className="rounded-xl w-full h-full object-cover"
+      />
       <canvas ref={canvasRef} className="hidden" />
     </div>
   );

@@ -63,12 +63,37 @@ export default function FaceAnalyzerPage() {
                 onResult={setResult}
                 streamRef={streamRef}
               />
-              <button
-                onClick={handleDisableCamera}
-                className="absolute bottom-4 right-4 px-6 py-3 bg-[#52d8bb] text-white font-semibold rounded-xl shadow hover:bg-[#48c0a6]"
-              >
-                Disable Camera
-              </button>
+            <button
+  onClick={handleDisableCamera}
+  className="
+    absolute
+    bottom-6           /* mobile me thoda upar from bottom for easy thumb reach */
+    md:bottom-4        /* desktop bottom-right */
+    left-1/2           /* mobile center horizontally */
+    md:left-auto
+    md:right-4
+    -translate-x-1/2   /* mobile center adjust */
+    md:translate-x-0
+    px-5
+    md:px-6
+    py-2.5
+    md:py-3
+    bg-[#52d8bb]
+    text-white
+    font-semibold
+    rounded-xl
+    shadow
+    hover:bg-[#48c0a6]
+    transition
+    text-sm
+    md:text-base
+    z-20
+  "
+>
+  Disable Camera
+</button>
+
+
             </>
           )}
         </div>
