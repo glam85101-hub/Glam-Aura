@@ -41,14 +41,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
-                <RegisterClient /> 
+                <RegisterClient /> {/* Har login ke baad user DB me register ho jayega */}
 
         <Header />
         {children}
         <Footer/>
       </body>
     </html>
-    </ClerkProvider>
+    </ClerkProvider>              
 
   );
 }

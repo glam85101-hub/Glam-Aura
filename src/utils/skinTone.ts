@@ -8,7 +8,7 @@ export function debounce<Func extends (...args: any[]) => void>(func: Func, dela
 }
 
 // Improved skin tone mapping using perceived brightness
-export const getSkinToneDetails = (hex: string) => {
+export const getSkinToneDetails= (hex: string) => {
   if (!hex) return { tone: "Unknown", season: "Unknown", suit: [], color: "#ccc" };
 
   const bigint = parseInt(hex.replace("#", ""), 16);
