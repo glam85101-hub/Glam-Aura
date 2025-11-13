@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_3!);
 
 // ✅ Retry helper
 async function generateWithRetry(model: any, payload: any, retries = 3, delay = 2000) {
