@@ -28,7 +28,7 @@ export default function Footer() {
       social: [
         { icon: <FaInstagram />, href: "https://www.instagram.com/glamaura387/" },
         { icon: <FaTwitter />, href: "https://x.com/HumemaA44967" },
-        { icon: <FaFacebook />, href: "https://www.facebook.com/profile.php?id=61581457560218" },
+        { icon: <FaFacebook />, href: "https://www.facebook.com/profile.php?id=61583609165895" },
         { icon: <FaLinkedin />, href: "https://www.linkedin.com/company/glamaura-studio" },
       ],
     },
