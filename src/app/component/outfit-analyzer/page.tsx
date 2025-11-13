@@ -95,14 +95,15 @@ export default function OutfitAnalyzerPage() {
             <div className="mt-4 flex-1 grid place-items-center">
               {imagePreview ? (
                 <div className="relative w-full">
-                 <Image
+        <Image
   src={imagePreview}
   alt="Preview"
-  width={600}   // you must provide width
-  height={400}  // you must provide height
-  className="w-full rounded-xl border"
-  unoptimized   // 👈 add this since `imagePreview` is base64
+  width={600}
+  height={400}
+  className="w-full max-h-[60vh] object-contain rounded-xl border"
+  unoptimized
 />
+
 
                   <button onClick={reset} className="absolute top-2 right-2 rounded-full bg-white/80 p-2 border hover:bg-blue-50" aria-label="Remove image">
                     <X className="h-4 w-4" />

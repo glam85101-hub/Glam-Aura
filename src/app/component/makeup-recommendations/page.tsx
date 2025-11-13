@@ -115,7 +115,7 @@ export default function MakeupAnalyzerPage() {
                     alt="Preview"
                     width={600}
                     height={400}
-                    className="w-full rounded-xl border"
+                    className="w-full max-h-[60vh] object-contain rounded-xl border"
                     unoptimized
                   />
                   <button
