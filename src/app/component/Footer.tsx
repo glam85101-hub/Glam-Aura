@@ -17,7 +17,7 @@ export default function Footer() {
     {
       title: "Company",
       links: [
-        { label: "About Us", href: "https://www.linkedin.com/in/glam-aura-087205387" },
+        { label: "About Us", href: "https://www.linkedin.com/company/glamaura-studio" },
         { label: "Contact", href: "/component/contact" },
         { label: "Privacy Policy", href: "/component/privacy-policy" },
         { label: "Terms", href: "/component/terms-and-conditions" },
@@ -29,7 +29,7 @@ export default function Footer() {
         { icon: <FaInstagram />, href: "https://www.instagram.com/glamaura387/" },
         { icon: <FaTwitter />, href: "https://x.com/HumemaA44967" },
         { icon: <FaFacebook />, href: "https://www.facebook.com/profile.php?id=61581457560218" },
-        { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/glam-aura-087205387" },
+        { icon: <FaLinkedin />, href: "https://www.linkedin.com/company/glamaura-studio" },
       ],
     },
   ];
