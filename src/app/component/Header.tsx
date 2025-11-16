@@ -32,8 +32,17 @@ export default function Header() {
     <>
       <nav className="bg-[#46c7ab]/95 fixed w-full top-0 left-0 z-50 border-b border-[#33353F]">
         <div className="max-w-[100%] flex justify-between items-center h-16 px-4 md:px-6">
-          {/* Logo */}
-          <div className="text-2xl font-bold text-white truncate">Personal Styling</div>
+         <div className="flex items-center gap-3">
+  <img
+    src="/logo2.png"
+    alt="Logo"
+    className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+  />
+  <span className="text-xl sm:text-2xl font-bold text-white truncate">
+    Personal Styling
+  </span>
+</div>
+
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-6 text-white text-lg">
