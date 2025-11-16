@@ -76,7 +76,7 @@ export default function About() {
           </p>
 
           <div className="flex flex-wrap justify-center -mx-4">
-            {/* Huma */}
+            {/* Humema */}
             <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 px-4 mb-8" data-aos="fade-up">
               <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md max-w-[380px] mx-auto">
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
