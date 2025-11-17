@@ -131,7 +131,7 @@ export default function PrivacyPolicy() {
             <FaTwitter />
           </a>
           <a
-            href="https://www.facebook.com/profile.php?id=61581457560218"
+            href="https://www.facebook.com/profile.php?id=61583609165895"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 hover:text-blue-700 transition-colors"
@@ -140,7 +140,7 @@ export default function PrivacyPolicy() {
             <FaFacebook />
           </a>
           <a
-            href="https://www.linkedin.com/in/glam-aura-087205387"
+            href="https://www.linkedin.com/company/glamaura-studio"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-700 hover:text-blue-800 transition-colors"
