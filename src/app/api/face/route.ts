@@ -53,10 +53,18 @@ You are a face and skin tone analysis AI. Analyze the input face image:
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (err: any) {
-    return new Response(
-      JSON.stringify({ error: err.message || "Server error" }),
-      { status: 500 }
-    );
+
+ } catch (err: any) {
+    console.error("Face API error:", err);
+
+    // ✅ Show friendly message for quota / high traffic
+    if (err.message === "HIGH_TRAFFIC") {
+      return new Response(
+        JSON.stringify({ error: "High traffic detected, please try again in a moment." }),
+        { status: 429 }
+      );
+    }
+
+    return new Response(JSON.stringify({ error: err.message || "Server error" }), { status: 500 });
   }
 }
