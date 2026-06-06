@@ -13,6 +13,7 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
   const links = [
@@ -28,48 +29,98 @@ export default function Header() {
     setIsOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <>
+        <nav className="bg-brand-teal/90 backdrop-blur-md fixed w-full top-0 left-0 z-50 border-b border-white/10 shadow-sm transition-all duration-300">
+          <div className="max-w-7xl mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105 active:scale-95">
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 overflow-hidden rounded-full bg-white/20 p-1 backdrop-blur-sm">
+                <img
+                  src="/logo2.png"
+                  alt="Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                Glam<span className="text-brand-mint">Aura</span>
+              </span>
+            </Link>
+            {/* Desktop Links - Placeholder for SSR */}
+            <div className="hidden md:flex items-center gap-8 text-white font-medium">
+              {links.map((link) => (
+                <Link key={link.href} href={link.href} className="relative py-1">{link.label}</Link>
+              ))}
+            </div>
+          </div>
+        </nav>
+        <div className="h-16 md:h-16" />
+      </>
+    );
+  }
+
   return (
     <>
-      <nav className="bg-[#46c7ab]/95 fixed w-full top-0 left-0 z-50 border-b border-[#33353F]">
-        <div className="max-w-[100%] flex justify-between items-center h-16 px-4 md:px-6">
-         <div className="flex items-center gap-3">
-  <img
-    src="/logo2.png"
-    alt="Logo"
-    className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
-  />
-  <span className="text-xl sm:text-2xl font-bold text-white truncate">
-    Personal Styling
-  </span>
-</div>
-
+      <nav className="bg-brand-teal/90 backdrop-blur-md fixed w-full top-0 left-0 z-50 border-b border-white/10 shadow-sm transition-all duration-300">
+        <div className="max-w-7xl mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105 active:scale-95">
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12 overflow-hidden rounded-full bg-white/20 p-1 backdrop-blur-sm">
+              <img
+                src="/logo2.png"
+                alt="Logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+              Glam<span className="text-brand-mint">Aura</span>
+            </span>
+          </Link>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-6 text-white text-lg">
+          <div className="hidden md:flex items-center gap-8 text-white font-medium">
             {links.map((link) => (
-              <Link key={link.href} href={link.href} className="hover:underline truncate">
+              <Link 
+                key={link.href} 
+                href={link.href} 
+                className={`relative py-1 transition-colors hover:text-brand-mint after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-mint after:transition-all hover:after:w-full ${pathname === link.href ? 'text-brand-mint after:w-full' : ''}`}
+              >
                 {link.label}
               </Link>
             ))}
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button className="px-4 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition">
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="px-4 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            <div className="flex items-center gap-4 ml-4">
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="px-5 py-2 text-white font-semibold hover:text-brand-mint transition-colors">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="px-5 py-2 bg-white text-brand-teal rounded-full font-bold shadow-md hover:bg-brand-mint hover:text-white hover:shadow-lg transition-all active:scale-95">
+                    Sign Up
+                  </button>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <div className="p-0.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+                  <UserButton 
+                    afterSignOutUrl="/" 
+                    appearance={{
+                      elements: {
+                        userButtonAvatarBox: "w-9 h-9"
+                      }
+                    }}
+                  />
+                </div>
+              </SignedIn>
+            </div>
           </div>
 
           {/* Mobile Hamburger + UserButton */}
-          <div className="flex md:hidden items-center gap-3">
+          <div className="flex md:hidden items-center gap-4">
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
@@ -77,56 +128,47 @@ export default function Header() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Close menu" : "Open menu"}
-              className="flex flex-col justify-between w-6 h-5 focus:outline-none"
+              className="relative w-10 h-10 flex items-center justify-center text-white focus:outline-none bg-white/10 rounded-lg backdrop-blur-sm"
             >
-              <span
-                className={`block h-0.5 w-6 bg-white transform transition duration-300 ${
-                  isOpen ? "rotate-45 translate-y-2" : ""
-                }`}
-              />
-              <span
-                className={`block h-0.5 w-6 bg-white transition-opacity duration-300 ${
-                  isOpen ? "opacity-0" : "opacity-100"
-                }`}
-              />
-              <span
-                className={`block h-0.5 w-6 bg-white transform transition duration-300 ${
-                  isOpen ? "-rotate-45 -translate-y-2" : ""
-                }`}
-              />
+              <div className="w-6 flex flex-col items-end gap-1.5">
+                <span className={`block h-0.5 bg-white transition-all duration-300 rounded-full ${isOpen ? 'w-6 rotate-45 translate-y-2' : 'w-6'}`} />
+                <span className={`block h-0.5 bg-white transition-all duration-200 rounded-full ${isOpen ? 'opacity-0' : 'w-4'}`} />
+                <span className={`block h-0.5 bg-white transition-all duration-300 rounded-full ${isOpen ? 'w-6 -rotate-45 -translate-y-2' : 'w-5'}`} />
+              </div>
             </button>
           </div>
         </div>
 
         {/* Mobile Dropdown Menu */}
-       <div
-  className={`md:hidden fixed top-16 left-0 w-full bg-[#46c7ab]/95 overflow-auto transition-all duration-300 z-50 ${
-    isOpen ? "max-h-[calc(100vh-4rem)] py-4 px-4" : "max-h-0 py-0 px-0"
-  }`}
->
-
-          <div className="flex flex-col items-center gap-6 text-white text-lg px-4">
+        <div
+          className={`md:hidden absolute top-full left-0 w-full bg-brand-teal/95 backdrop-blur-xl border-t border-white/10 overflow-hidden transition-all duration-500 ease-in-out shadow-2xl ${
+            isOpen ? "max-h-[80vh] py-8 opacity-100" : "max-h-0 py-0 opacity-0"
+          }`}
+        >
+          <div className="flex flex-col items-center gap-6 px-6">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:underline truncate w-full text-center"
+                className={`text-xl font-bold tracking-wide w-full text-center py-2 transition-colors ${pathname === link.href ? 'text-brand-mint' : 'text-white hover:text-brand-mint'}`}
               >
                 {link.label}
               </Link>
             ))}
 
             <SignedOut>
-              <SignInButton mode="modal">
-                <button className="px-6 py-2 bg-white text-[#46c7ab] rounded-lg hover:bg-gray-100 transition w-full">
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="px-6 py-2 bg-[#33353F] text-white rounded-lg hover:bg-gray-800 transition w-full">
-                  Sign Up
-                </button>
-              </SignUpButton>
+              <div className="flex flex-col w-full gap-4 mt-4 pt-6 border-t border-white/10">
+                <SignInButton mode="modal">
+                  <button className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-bold backdrop-blur-sm hover:bg-white/20 transition-all">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="w-full py-4 bg-brand-mint text-brand-teal rounded-2xl font-bold shadow-xl hover:bg-white transition-all active:scale-[0.98]">
+                    Join GlamAura
+                  </button>
+                </SignUpButton>
+              </div>
             </SignedOut>
           </div>
         </div>

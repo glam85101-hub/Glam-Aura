@@ -5,19 +5,22 @@ import React, { useRef, useEffect } from "react";
 export type FaceAnalysisResult = {
   skinColor: string;
   tone: string;
+  undertone: string;
   season: string;
   dominantExpression: string;
   suit: string[];
+  palette?: { name: string; hex: string }[];
   description?: string; // <-- add optional description from Gemini
 };
 
 export interface FaceAnalyzerProps {
   running: boolean;
   onResult: (result: FaceAnalysisResult) => void;
+  onError?: (error: string) => void;
   streamRef?: React.MutableRefObject<MediaStream | null>; // optional stream ref from parent
 }
 
-const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult, streamRef }) => {
+const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult, onError, streamRef }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -25,13 +28,23 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult, streamRe
   const captureFrame = async () => {
     if (!videoRef.current || !canvasRef.current) return;
     const canvas = canvasRef.current;
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
+    const video = videoRef.current;
+    const scale = Math.min(1, 640 / video.videoWidth);
+    canvas.width = video.videoWidth * scale;
+    canvas.height = video.videoHeight * scale;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    // Ensure video has loaded
+    if (canvas.width === 0 || canvas.height === 0) return;
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const frameB64 = canvas.toDataURL("image/jpeg").split(",")[1];
+
+    if (!frameB64) {
+      if (onError) onError("Failed to capture frame");
+      return;
+    }
 
     try {
       const res = await fetch("/api/face", {
@@ -41,9 +54,14 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult, streamRe
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        if (onError) onError(data.error || "Analysis failed");
+        return;
+      }
       if (data.analysis) onResult(data.analysis); // Gemini result
-    } catch (err) {
+    } catch (err: any) {
       console.error("Gemini API error:", err);
+      if (onError) onError(err.message || "Connection error");
     }
   };
 
@@ -69,14 +87,30 @@ useEffect(() => {
       if (videoRef.current) videoRef.current.srcObject = stream;
       if (streamRef) streamRef.current = stream;
 
+      let failureCount = 0;
+      const maxFailures = 5;
+
       const loop = async () => {
         if (!running) return;
-        await captureFrame();
+        
+        try {
+          await captureFrame();
+          failureCount = 0; // Reset on success
+        } catch (err) {
+          failureCount++;
+          console.warn(`Capture failed (${failureCount}/${maxFailures}):`, err);
+          if (failureCount >= maxFailures) {
+            if (onError) onError("Multiple capture failures - please try again");
+            return;
+          }
+        }
+        
         setTimeout(loop, 2000);
       };
       loop();
     } catch (err) {
       console.error("Camera error:", err);
+      if (onError) onError("Camera access denied or not available");
     }
   };
 
@@ -89,7 +123,7 @@ useEffect(() => {
     if (videoRef.current) videoRef.current.srcObject = null;
     if (streamRef) streamRef.current = null;
   };
-}, [running, streamRef]);
+}, [running, streamRef, onError]);
 
   return (
     <div className="relative w-full h-full">

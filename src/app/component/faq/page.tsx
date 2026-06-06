@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import Link from "next/link";
 
 type FAQItem = {
   question: string;
@@ -50,25 +51,25 @@ export default function FAQ() {
   };
 
   return (
-    <section className="bg-[#f8f2ef] text-black body-font py-20 px-6">
-      <div className="container mx-auto max-w-4xl">
+    <section className="bg-brand-beige py-24 px-6 overflow-hidden">
+      <div className="container mx-auto max-w-4xl relative">
+        <div className="absolute -top-20 -left-20 w-64 h-64 bg-brand-teal/5 rounded-full blur-3xl -z-10"></div>
+        
         {/* Section Heading */}
-        <div className="mb-12 text-center">
-          <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-2 uppercase">
-            FAQ
-          </h2>
-          <h1 className="title-font text-3xl font-bold text-gray-900 mb-4">
-            Frequently Asked Questions
+        <div className="mb-16 text-center" data-aos="fade-up">
+          <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest">
+            Support
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-black text-brand-dark tracking-tight mb-6">
+            Everything You <span className="text-brand-teal italic">Need to Know</span>
           </h1>
-          <p className="text-gray-600 text-base max-w-2xl mx-auto">
-            Find answers to the most common questions about our AI-powered
-            personal styling platform. Learn how to use features like
-            FaceFusion, LookSense, and Color Analysis with ease.
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto font-medium">
+            Find clarity on how our AI-powered personal styling platform works and how it can help you discover your best look.
           </p>
         </div>
 
         {/* Accordion */}
-        <div className="space-y-4">
+        <div className="space-y-4 max-w-3xl mx-auto">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
@@ -76,18 +77,25 @@ export default function FAQ() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="border border-gray-300 rounded-xl bg-white shadow-sm"
+              className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                openIndex === i 
+                ? "border-brand-teal/30 bg-white shadow-xl shadow-brand-teal/5" 
+                : "border-brand-teal/10 bg-white/50 hover:bg-white hover:border-brand-teal/20"
+              }`}
             >
               <button
                 onClick={() => toggleFAQ(i)}
-                className="w-full flex justify-between items-center px-5 py-4 text-left text-lg font-medium text-gray-800 hover:text-[#52d8bb] transition"
+                className="w-full flex justify-between items-center px-8 py-6 text-left group"
               >
-                {faq.question}
+                <span className={`text-lg font-bold transition-colors ${openIndex === i ? 'text-brand-teal' : 'text-brand-dark group-hover:text-brand-teal'}`}>
+                  {faq.question}
+                </span>
                 <motion.div
                   animate={{ rotate: openIndex === i ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
+                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${openIndex === i ? 'bg-brand-teal text-white' : 'bg-brand-teal/5 text-brand-teal'}`}
                 >
-                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                  <ChevronDown className="w-5 h-5" />
                 </motion.div>
               </button>
 
@@ -98,9 +106,8 @@ export default function FAQ() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
                   >
-                    <div className="px-5 pb-4 text-gray-600 text-base">
+                    <div className="px-8 pb-8 text-gray-600 text-lg leading-relaxed border-t border-brand-teal/5 pt-6">
                       {faq.answer}
                     </div>
                   </motion.div>
@@ -108,6 +115,14 @@ export default function FAQ() {
               </AnimatePresence>
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-20 text-center" data-aos="fade-up">
+           <p className="text-gray-500 font-medium mb-4">Still have questions?</p>
+           <Link href="/component/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-brand-dark text-white rounded-2xl font-bold hover:bg-brand-teal transition-all shadow-lg shadow-brand-dark/20 active:scale-95">
+              Contact Support Team
+              <span className="text-xl">→</span>
+           </Link>
         </div>
       </div>
     </section>

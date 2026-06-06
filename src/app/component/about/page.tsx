@@ -1,117 +1,111 @@
+import Image from "next/image";
+
 export default function About() {
   return (
-    <section className="bg-[#f8f2ef] text-black body-font">
-      <div className="container px-4 sm:px-5 py-16 sm:py-24 mx-auto">
+    <section className="bg-brand-beige text-brand-dark py-24 sm:py-32 overflow-hidden">
+      <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
 
         {/* Heading Section */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-2">
-            ABOUT OUR PROJECT
-          </h2>
-          <h1 className="title-font text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
-            AI-Powered Personal Styling
+        <div className="text-center mb-20 max-w-3xl mx-auto" data-aos="fade-up">
+          <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest">
+            Our Story
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-brand-dark tracking-tight mb-6">
+            Blending Beauty with <span className="text-brand-teal italic">Intelligence</span>
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
-            Our platform leverages Artificial Intelligence to analyze facial features, skin tone, and
-            recommend clothing styles, colors, jewelry, and accessories for a personalized look.
+          <p className="text-lg sm:text-xl text-gray-600 leading-relaxed font-medium">
+            We're on a mission to revolutionize personal styling through the power of advanced AI, making high-end fashion insights accessible to everyone.
           </p>
         </div>
 
-        {/* Mission & Why Choose Us */}
-        <div className="flex flex-wrap -mx-4 -my-8">
-          <div className="py-8 px-4 w-full lg:w-1/2">
-            <div className="h-full flex items-start" data-aos="fade-down">
-              <div className="flex-grow max-w-[500px] mx-auto">
-                <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-1">
-                  OUR MISSION
-                </h2>
-                <h1 className="title-font text-xl sm:text-2xl font-semibold text-gray-900 mb-3">
-                  Making Style Simple
-                </h1>
-                <p className="leading-relaxed mb-5 text-base sm:text-lg text-gray-700">
-                  Fashion should not be intimidating. With the power of AI, our platform guides users
-                  to find their ideal look without the stress of trial and error.
-                </p>
-                <p className="leading-relaxed mb-5 text-base sm:text-lg text-gray-700">
-                  Our goal is to boost confidence, save time, and empower people to embrace their unique
-                  style with recommendations tailored exclusively for them.
-                </p>
-              </div>
+        {/* Mission & Vision */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-32">
+          <div className="relative group p-10 bg-white rounded-3xl shadow-xl shadow-brand-teal/5 transition-all duration-500 hover:-translate-y-2 border border-brand-teal/10" data-aos="fade-right">
+            <div className="absolute top-0 right-0 p-8 text-brand-teal/10 group-hover:text-brand-teal/20 transition-colors">
+              <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 21H23L12 2ZM12 6L19.53 19H4.47L12 6ZM11 11V13H13V11H11ZM11 15V17H13V15H11Z"/></svg>
             </div>
+            <h2 className="text-brand-teal font-black text-sm uppercase tracking-widest mb-4">Our Mission</h2>
+            <h3 className="text-2xl sm:text-3xl font-bold mb-6">Making Style Simple</h3>
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              Fashion should be an expression of confidence, not a source of stress. We use AI to remove the guesswork, guiding you to your ideal look with precision.
+            </p>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              Our goal is to empower individuals to embrace their unique beauty with recommendations tailored exclusively for them.
+            </p>
           </div>
 
-          <div className="py-8 px-4 w-full lg:w-1/2">
-            <div className="h-full flex items-start" data-aos="fade-down">
-              <div className="flex-grow max-w-[500px] mx-auto">
-                <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-1">
-                  WHY CHOOSE US
-                </h2>
-                <h1 className="title-font text-xl sm:text-2xl font-semibold text-gray-900 mb-3">
-                  Personalized AI Styling
-                </h1>
-                <p className="leading-relaxed mb-5 text-base sm:text-lg text-gray-700">
-                  By combining AI insights with style expertise, we provide recommendations that help
-                  individuals feel confident and stylish every day.
-                </p>
-                <p className="leading-relaxed mb-5 text-base sm:text-lg text-gray-700">
-                  Accessible anytime, our platform ensures everyone can get personal styling
-                  guidance tailored just for them.
-                </p>
-              </div>
+          <div className="relative group p-10 bg-brand-teal text-white rounded-3xl shadow-2xl shadow-brand-teal/30 transition-all duration-500 hover:-translate-y-2" data-aos="fade-left">
+            <div className="absolute top-0 right-0 p-8 text-white/10 group-hover:text-white/20 transition-colors">
+              <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
             </div>
+            <h2 className="text-brand-mint font-black text-sm uppercase tracking-widest mb-4">Why Choose Us</h2>
+            <h3 className="text-2xl sm:text-3xl font-bold mb-6">AI Precision Styling</h3>
+            <p className="text-brand-beige/90 text-lg leading-relaxed mb-6">
+              By merging style expertise with neural network analysis, we provide hyper-personalized insights that help you feel confident every single day.
+            </p>
+            <p className="text-brand-beige/90 text-lg leading-relaxed">
+              Accessible anywhere, our platform is your 24/7 personal stylist, evolving with your preferences and trends.
+            </p>
           </div>
         </div>
 
-        {/* About Us / Founders Section */}
-        <div className="mt-16 sm:mt-20 text-center">
-          <h2 className="tracking-widest text-xs title-font font-medium text-[#5af1d0] mb-2">
-            MEET THE FOUNDERS
-          </h2>
-          <h1 className="title-font text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            The Team Behind the Vision
-          </h1>
-          <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto mb-12">
-            Our platform is built by two passionate developers committed to blending beauty,
-            technology, and AI to make styling easier and more personal for everyone.
-          </p>
-
-          <div className="flex flex-wrap justify-center -mx-4">
-            {/* Humema */}
-            <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 px-4 mb-8" data-aos="fade-up">
-              <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md max-w-[380px] mx-auto">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                  Humema Israr
-                </h3>
-                <p className="text-[#5af1d0] font-medium text-xs sm:text-sm mb-3">
-                  Frontend Developer • Agentic AI Developer
+        {/* Founders Section */}
+        <div className="text-center relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[150%] bg-white -z-10 skew-y-3"></div>
+          
+          <div className="pt-24 pb-32">
+            <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest" data-aos="fade-up">
+              The Visionaries
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-black text-brand-dark mb-16" data-aos="fade-up">Meet the Founders</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto px-4">
+              {/* Humema */}
+              <div className="group relative bg-brand-beige p-10 rounded-[2.5rem] border border-brand-teal/5 transition-all duration-500 hover:shadow-2xl hover:shadow-brand-teal/10 hover:-translate-y-2" data-aos="fade-up">
+                <div className="relative w-20 h-20 mb-8 group-hover:rotate-12 transition-transform">
+                  <div className="absolute inset-0 bg-brand-teal rounded-2xl shadow-xl shadow-brand-teal/20 -rotate-6"></div>
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-white shadow-lg">
+                    <Image 
+                      src="/humema.jpeg" 
+                      alt="Humema Israr"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-brand-dark mb-2">Humema Israr</h3>
+                <p className="text-brand-teal font-black text-xs uppercase tracking-widest mb-6">Frontend & Agentic AI Architect</p>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  Specializing in crafting intuitive, beautiful interfaces that bring AI insights to life through seamless user experiences.
                 </p>
-                <p className="text-gray-700 text-sm sm:text-base">
-                  Specializes in creating beautiful, intuitive user interfaces and integrating
-                  advanced agentic AI to deliver instant, interactive styling experiences.
+              </div>
+
+              {/* Faria */}
+              <div className="group relative bg-brand-beige p-10 rounded-[2.5rem] border border-brand-teal/5 transition-all duration-500 hover:shadow-2xl hover:shadow-brand-teal/10 hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
+                <div className="relative w-20 h-20 mb-8 group-hover:-rotate-12 transition-transform">
+                  <div className="absolute inset-0 bg-brand-dark rounded-2xl shadow-xl shadow-brand-dark/20 rotate-6"></div>
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-white shadow-lg">
+                    <Image 
+                      src="/faria.jpg" 
+                      alt="Faria Mustaqim"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-brand-dark mb-2">Faria Mustaqim</h3>
+
+                <p className="text-brand-teal font-black text-xs uppercase tracking-widest mb-6">Backend & AI Core Developer</p>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  Expert in scalable AI architecture, ensuring that every recommendation is fast, accurate, and data-driven.
                 </p>
               </div>
             </div>
 
-            {/* Faria */}
-            <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 px-4 mb-8" data-aos="fade-up">
-              <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md max-w-[380px] mx-auto">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                  Faria Mustaqim
-                </h3>
-                <p className="text-[#5af1d0] font-medium text-xs sm:text-sm mb-3">
-                  Backend Developer • Agentic AI Developer
-                </p>
-                <p className="text-gray-700 text-sm sm:text-base">
-                  Expert in backend engineering and AI architecture, she ensures the platform is
-                  fast, scalable, and capable of delivering accurate styling recommendations.
-                </p>
-              </div>
-            </div>
+            <p className="mt-20 text-xl font-bold text-brand-dark italic max-w-2xl mx-auto leading-relaxed" data-aos="fade-up">
+              "Together, we're building the future of personalized beauty and style."
+            </p>
           </div>
-
-          <p className="mt-6 sm:mt-8 text-gray-800 text-base sm:text-lg font-medium max-w-xl mx-auto">
-            Together, Humema and Faria are the founders of the Personal Styling AI Platform.
-          </p>
         </div>
       </div>
     </section>

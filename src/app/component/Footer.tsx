@@ -1,101 +1,73 @@
 "use client";
 
-import { CgGirl } from "react-icons/cg";
+import Link from "next/link";
 import { FaInstagram, FaTwitter, FaFacebook, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
-  const sections = [
-    {
-      title: "Product",
-      links: [
-        { label: "How it works", href: "/component/about" },
-        { label: "Features", href: "/component/features" },
-        { label: "FAQ", href: "/component/faq" },
-        { label: "Pricing", href: "/component/pricing" },
-      ],
-    },
-    {
-      title: "Company",
-      links: [
-        { label: "About Us", href: "https://www.linkedin.com/company/glamaura-studio" },
-        { label: "Contact", href: "/component/contact" },
-        { label: "Privacy Policy", href: "/component/privacy-policy" },
-        { label: "Terms", href: "/component/terms-and-conditions" },
-      ],
-    },
-    {
-      title: "Follow Us",
-      social: [
-        { icon: <FaInstagram />, href: "https://www.instagram.com/glamaura387/" },
-        { icon: <FaTwitter />, href: "https://x.com/HumemaA44967" },
-        { icon: <FaFacebook />, href: "https://www.facebook.com/profile.php?id=61583609165895" },
-        { icon: <FaLinkedin />, href: "https://www.linkedin.com/company/glamaura-studio" },
-      ],
-    },
-  ];
-
   return (
-    <footer className="text-gray-600 body-font bg-[#f8f2ef]">
-      <div className="container px-5 py-12 mx-auto flex flex-wrap md:flex-nowrap md:items-start items-center">
-        {/* Logo + Intro */}
-        <div className="w-full md:w-64 flex-shrink-0 text-center md:text-left mb-10 md:mb-0 md:mr-16">
-          <p className="flex title-font font-medium items-center justify-center md:justify-start text-gray-900">
-            <CgGirl className="text-2xl" />
-            <span className="ml-3 text-xl font-semibold">Personal Styling</span>
-          </p>
-          <p className="mt-2 text-sm text-gray-500">
-            AI-powered personal styling — helping you discover the clothing
-            styles and colors that truly bring out your best look.
-          </p>
-        </div>
-
-        {/* Footer Links + Social */}
-        <div className="flex flex-1 justify-between flex-wrap gap-6">
-          {sections.map((section, idx) => (
-            <div key={idx} className="w-1/2 sm:w-auto px-2 md:px-4">
-              <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-                {section.title}
-              </h2>
-              {section.links && (
-                <nav className="list-none">
-                  {section.links.map((link, i) => (
-                    <li key={i}>
-                      <a
-                        href={link.href}
-                        className="text-gray-600 hover:text-gray-800 cursor-pointer text-sm sm:text-base"
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </nav>
-              )}
-              {section.social && (
-                <div className="flex space-x-4">
-                  {section.social.map((s, i) => (
-                    <a
-                      key={i}
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-blue-500 text-2xl"
-                    >
-                      {s.icon}
-                    </a>
-                  ))}
-                </div>
-              )}
+    <footer className="bg-brand-dark text-white py-16 px-6 sm:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          {/* Brand Section */}
+          <div className="space-y-6">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-full bg-brand-teal p-1.5 transition-transform group-hover:scale-110">
+                <img src="/logo2.png" alt="Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="text-2xl font-black tracking-tight">
+                Glam<span className="text-brand-teal">Aura</span>
+              </span>
+            </Link>
+            <p className="text-gray-400 text-lg leading-relaxed">
+              Elevating your style with the precision of Artificial Intelligence.
+            </p>
+            <div className="flex gap-5 text-2xl text-gray-400">
+              <a href="https://www.instagram.com/glamaura387/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaInstagram /></a>
+              <a href="https://x.com/HumemaA44967" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaTwitter /></a>
+              <a href="https://www.facebook.com/profile.php?id=61583609165895" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaFacebook /></a>
+              <a href="https://www.linkedin.com/company/glamaura-studio" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaLinkedin /></a>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      {/* Bottom Bar */}
-      <div className="bg-gray-100">
-        <div className="container mx-auto py-4 px-5 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
-          <p className="text-gray-500 text-sm text-center sm:text-left">
-            © 2025 Made by Humema & Faria — Personal Styling Platform
-          </p>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-xl font-bold mb-6 text-white uppercase tracking-widest text-sm">Navigation</h3>
+            <ul className="space-y-4 text-gray-400 font-medium">
+              <li><Link href="/" className="hover:text-brand-teal transition-colors">Home</Link></li>
+              <li><Link href="/component/about" className="hover:text-brand-teal transition-colors">About Us</Link></li>
+              <li><Link href="/component/features" className="hover:text-brand-teal transition-colors">Features</Link></li>
+              <li><Link href="/component/pricing" className="hover:text-brand-teal transition-colors">Pricing</Link></li>
+              <li><Link href="/component/contact" className="hover:text-brand-teal transition-colors">Contact</Link></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 className="text-xl font-bold mb-6 text-white uppercase tracking-widest text-sm">Services</h3>
+            <ul className="space-y-4 text-gray-400 font-medium">
+              <li><Link href="/component/skin-analyzer" className="hover:text-brand-teal transition-colors">Skin Analysis</Link></li>
+              <li><Link href="/component/makeup" className="hover:text-brand-teal transition-colors">Makeup Guide</Link></li>
+              <li><Link href="/component/outfit" className="hover:text-brand-teal transition-colors">Outfit Checker</Link></li>
+              <li><Link href="/component/facial-analysis" className="hover:text-brand-teal transition-colors">Facial Analysis</Link></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-xl font-bold mb-6 text-white uppercase tracking-widest text-sm">Legal</h3>
+            <ul className="space-y-4 text-gray-400 font-medium">
+              <li><Link href="/component/privacy-policy" className="hover:text-brand-teal transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/component/terms-and-conditions" className="hover:text-brand-teal transition-colors">Terms & Conditions</Link></li>
+              <li><Link href="/component/faq" className="hover:text-brand-teal transition-colors">FAQ</Link></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-sm font-medium">
+          <p>&copy; {new Date().getFullYear()} GlamAura Studio. All rights reserved.</p>
+          <div className="flex gap-8">
+            <span>Designed with ❤️ by Faria & Humema</span>
+          </div>
         </div>
       </div>
     </footer>

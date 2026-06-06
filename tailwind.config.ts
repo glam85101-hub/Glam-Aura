@@ -50,10 +50,13 @@ const config: Config = {
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
   			border: 'hsl(var(--border))',
-    brand: {
-      DEFAULT: '#46c7ab',
-      dark: '#3bb199',
-    },
+   brand: {
+  DEFAULT: '#46c7ab',
+  dark: '#1A1A1A',
+  beige: '#F5F0E8',
+  teal: '#46c7ab',
+  mint: '#5af1d0',
+},
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			chart: {

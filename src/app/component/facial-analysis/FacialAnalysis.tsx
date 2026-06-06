@@ -106,4 +106,3 @@ export default function FacialAnalysis({ features }: FacialAnalysisProps) {
     </motion.div>
   );
 }
-
