@@ -3,6 +3,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import Footer from "../app/component/Footer";
 import Header from "../app/component/Header";
 import RegisterClient from "../app/component/RegisterClient";
+import ChatBot from "../app/component/ChatBot";
 
 import {
   ClerkProvider,
@@ -49,6 +50,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer/>
+        <ChatBot />
       </body>
     </html>
     </ClerkProvider>              
