@@ -1,13 +1,13 @@
 import type { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = (process.env.GEMINI_API_KEY_1 || "").replace(/['"]/g, "").trim();
+const API_KEY = (process.env.NEXT_PUBLIC_GEMINI_API_KEY_1 || "").replace(/['"]/g, "").trim(); // Ensure GEMINI_API_KEY_1 environment variable is set
 console.log("Chat API initialized. Key present:", !!API_KEY);
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function generateResponse(history: any[], userMessage: string) {
-  const models = ["gemini-1.5-flash", "gemini-2.0-flash"];
+  const models = ["gemini-3.5-flash"];
   let lastError: any = null;
 
   const systemInstruction = `You are "Aura", the official AI style assistant for GlamAura. 
@@ -27,16 +27,28 @@ Your Tone: Professional, sophisticated, and stylish. Always keep responses conci
       // And MUST NOT end with a model message if we are sending a new user message.
       const formattedHistory: any[] = [];
       let lastRole = "";
+      let firstMessageProcessed = false;
 
       for (const m of history) {
         const currentRole = m.role === 'user' ? 'user' : 'model';
+        
+        // Skip any leading messages from the model
+        if (!firstMessageProcessed && currentRole === 'model') {
+          continue;
+        }
+
         if (currentRole !== lastRole) {
           formattedHistory.push({
             role: currentRole,
             parts: [{ text: m.content }]
           });
           lastRole = currentRole;
+        } else {
+          // If the role is the same as the last one, combine the content.
+          const lastMessage = formattedHistory[formattedHistory.length - 1];
+          lastMessage.parts[0].text += `\n${m.content}`;
         }
+        firstMessageProcessed = true;
       }
 
       const chat = model.startChat({
