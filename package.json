@@ -25,15 +25,16 @@
     "face-api.js": "^0.22.2",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.556.0",
-    "next": "^16.0.7",
+    "next": "^16.2.6",
     "openai": "^5.23.2",
     "prisma": "^6.19.0",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-icons": "^5.5.0",
     "stripe": "^18.5.0",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.1",

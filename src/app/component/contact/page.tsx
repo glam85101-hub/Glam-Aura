@@ -11,36 +11,52 @@ export default function Contact() {
   });
   const [status, setStatus] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('sending');
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setStatus('sending');
 
-    const form = new FormData();
-    form.append('name', formData.name);
-    form.append('email', formData.email);
-    form.append('message', formData.message);
-    form.append('_subject', 'New Contact Form Submission');
-    form.append('_template', 'table');
-    form.append('_captcha', 'false');
-    form.append('_autoresponse', 'Thank you for contacting me! I will reply soon.');
+  const formDataToSend = new FormData();
 
-    try {
-      const response = await fetch('https://formsubmit.co/56bfe3c8dc7e27c91310ebff7098c7cc', {
+  formDataToSend.append(
+    'access_key',
+    process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || ''
+  );
+
+  formDataToSend.append('name', formData.name);
+  formDataToSend.append('email', formData.email);
+  formDataToSend.append('message', formData.message);
+
+  formDataToSend.append(
+    'subject',
+    'New Contact Form Submission'
+  );
+
+  try {
+    const response = await fetch(
+      'https://api.web3forms.com/submit',
+      {
         method: 'POST',
-        body: form,
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        throw new Error('Failed to send message');
+        body: formDataToSend,
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+      setStatus('success');
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+      });
+    } else {
       setStatus('error');
     }
-  };
+  } catch (error) {
+    console.error(error);
+    setStatus('error');
+  }
+};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
