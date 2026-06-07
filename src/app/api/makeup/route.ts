@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_3!);
+const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY_3!);
 
 // ✅ Retry helper
 async function generateWithRetry(model: any, payload: any, retries = 3, delay = 2000) {
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     const userNote = note ? `Context: ${note}` : "";
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
     const result = await generateWithRetry(model, {
       contents: [

@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_1!);
+const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY_4!);
 
 // ✅ Retry helper (same logic as your makeup API)
 async function generateWithRetry(
@@ -61,7 +61,7 @@ suggestedPieces[].`;
     const userNote = note ? `Context: ${note}` : "";
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
+      model: "gemini-3.5-flash",
     });
 
     const result = await generateWithRetry(model, {

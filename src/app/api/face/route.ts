@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_2!);
+const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY_2!);
 
 // ✅ Retry helper
 async function generateWithRetry(model: any, payload: any, retries = 3, delay = 2000) {
@@ -33,18 +33,30 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: "Image required" }), { status: 400 });
     }
 
-   const systemPrompt = `
-You are a face and skin tone analysis AI. Analyze the input face image:
-- Detect skin tone (Dark, Medium, Light, Neutral)
-- Suggest season type (Winter, Summer, Autumn, Spring)
-- Return dominant facial expression (e.g., Happy, Neutral, Sad)
-- Suggest 5 colors that suit this skin tone
-- Provide a short 1-2 sentence description of the facial features
-- Return JSON only with keys: skinColor (hex), tone, season, dominantExpression, suit[], description
+      const systemPrompt = `
+You are a face and skin tone analysis AI. Analyze the input face image and return structured JSON.
+
+Analyze the following and return it in a single JSON object:
+1. Facial Features:
+    - faceShape
+    - eyeShape
+    - eyeColor
+    - skinTone (e.g., "Fair", "Medium", "Olive", "Deep")
+    - undertone (e.g., "Warm", "Cool", "Neutral")
+    - lipShape
+2. Overall Analysis:
+    - skinColor: The dominant skin color as a hex code.
+    - tone: A general skin tone category ("Dark", "Medium", "Light", "Neutral"). This should be consistent with skinTone.
+    - season: The color season ("Winter", "Summer", "Autumn", "Spring").
+    - dominantExpression: The most prominent facial expression ("Happy", "Neutral", "Sad", etc.).
+    - suit: An array of 5 color names that complement the skin tone.
+    - description: A 1-2 sentence summary of the overall facial features.
+
+Return ONLY the JSON object with the keys: "features", "skinColor", "tone", "season", "dominantExpression", "suit", "description". The "features" key should contain an object with its specified keys.
 `;
 
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
     const result = await generateWithRetry(model, {
       contents: [

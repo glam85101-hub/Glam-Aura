@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 
+import { Features } from "../facial-analysis/FacialAnalysis";
 export type FaceAnalysisResult = {
   skinColor: string;
   tone: string;
@@ -10,7 +11,8 @@ export type FaceAnalysisResult = {
   dominantExpression: string;
   suit: string[];
   palette?: { name: string; hex: string }[];
-  description?: string; // <-- add optional description from Gemini
+  description?: string;
+  features: Features; 
 };
 
 export interface FaceAnalyzerProps {
