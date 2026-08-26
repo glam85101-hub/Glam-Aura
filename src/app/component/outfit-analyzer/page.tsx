@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Camera, Upload, Sparkles, Shirt, Palette, X, ChevronRight, Check, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { SignInButton, useUser } from '@clerk/nextjs';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 type Analysis = {
   verdict: string;
@@ -26,6 +27,7 @@ export default function OutfitAnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const isMobile = useIsMobile();
 
   const handleFile = async (file: File) => {
     const reader = new FileReader();
@@ -43,7 +45,7 @@ export default function OutfitAnalyzerPage() {
         setImagePreview(compressedB64);
         setFileB64(compressedB64.split(",")[1]);
       };
-      img.src = e.target?.result;
+      img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -106,7 +108,7 @@ export default function OutfitAnalyzerPage() {
             Style AI
           </div>
           <motion.h1 
-            initial={{ opacity: 0, y: -8 }} 
+            initial={isMobile ? {} : { opacity: 0, y: -8 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.4 }} 
             className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
@@ -121,14 +123,14 @@ export default function OutfitAnalyzerPage() {
         <section className="grid lg:grid-cols-2 gap-12 items-start">
           {/* LEFT: Upload */}
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
+            initial={isMobile ? {} : { opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl relative overflow-hidden group" 
             onDragOver={(e) => e.preventDefault()} 
             onDrop={onDrop}
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-teal/10 rounded-full blur-3xl -z-10 group-hover:bg-brand-teal/20 transition-colors" />
-            
+
             <div className="flex items-center gap-3 text-brand-teal font-bold text-sm uppercase tracking-widest mb-6">
               <Camera className="h-5 w-5" /> Outfit Photo
             </div>
@@ -195,7 +197,7 @@ export default function OutfitAnalyzerPage() {
 
           {/* RIGHT: Results */}
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
+            initial={isMobile ? {} : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl min-h-[600px] flex flex-col"
           >

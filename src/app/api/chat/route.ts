@@ -1,13 +1,10 @@
 import type { NextRequest } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { createGenAI, GEMINI_MODEL } from "@/lib/gemini";
 
-const API_KEY = (process.env.NEXT_PUBLIC_GEMINI_API_KEY_1 || "").replace(/['"]/g, "").trim(); // Ensure GEMINI_API_KEY_1 environment variable is set
-console.log("Chat API initialized. Key present:", !!API_KEY);
-
-const genAI = new GoogleGenerativeAI(API_KEY);
+const genAI = createGenAI("GEMINI_API_KEY_1");
 
 async function generateResponse(history: any[], userMessage: string) {
-  const models = ["gemini-3.5-flash"];
+  const models = [GEMINI_MODEL];
   let lastError: any = null;
 
   const systemInstruction = `You are "Aura", the official AI style assistant for GlamAura. 

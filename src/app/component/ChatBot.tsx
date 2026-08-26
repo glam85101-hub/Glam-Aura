@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send, Sparkles, User, Loader2 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 type Message = {
   role: "user" | "aura";
@@ -26,6 +27,7 @@ export default function ChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const greetedRef = useRef(false);
+  const isMobile = useIsMobile();
 
   // Auto scroll
   useEffect(() => {
@@ -83,18 +85,18 @@ export default function ChatBot() {
   };
 
   return (
-    <>
+    <div>
       {/* Floating Toggle Button */}
       <motion.button
         className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-r from-brand-teal to-brand-mint shadow-2xl flex items-center justify-center z-[9999] group"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={isMobile ? {} : { scale: 1.1 }}
+        whileTap={isMobile ? {} : { scale: 0.9 }}
         onClick={() => setIsOpen(true)}
       >
         <MessageSquare className="text-brand-dark" size={30} />
         <motion.span
           className="absolute bottom-3 right-3 w-3 h-3 bg-white rounded-full"
-          animate={{ opacity: [0.4, 1, 0.4] }}
+          animate={isMobile ? {} : { opacity: [0.4, 1, 0.4] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
         />
       </motion.button>
@@ -104,15 +106,15 @@ export default function ChatBot() {
         {isOpen && (
           <motion.div
             className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end justify-center z-[10000] p-4 sm:p-6"
-            initial={{ opacity: 0 }}
+            initial={isMobile ? {} : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
               className="relative w-full max-w-lg bg-brand-dark border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden"
-              initial={{ y: 40, opacity: 0 }}
+              initial={isMobile ? {} : { y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 40, opacity: 0 }}
+              exit={isMobile ? {} : { y: 40, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               {/* Header */}
@@ -140,7 +142,7 @@ export default function ChatBot() {
                   <motion.div
                     key={i}
                     className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={isMobile ? {} : { opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
                     <div
@@ -158,7 +160,7 @@ export default function ChatBot() {
                 {isLoading && (
                   <motion.div
                     className="flex items-center space-x-2 bg-white/5 w-fit px-4 py-3 rounded-2xl rounded-tl-none border border-white/5"
-                    initial={{ opacity: 0 }}
+                    initial={isMobile ? {} : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                   >
                     <Loader2 className="w-4 h-4 text-brand-teal animate-spin" />
@@ -208,6 +210,6 @@ export default function ChatBot() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

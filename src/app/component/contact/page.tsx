@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ export default function Contact() {
     message: ''
   });
   const [status, setStatus] = useState('');
+  const isMobile = useIsMobile();
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -80,7 +82,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           Connect
         </div>
         <motion.h1
-          initial={{ opacity: 0, y: -10 }}
+          initial={isMobile ? {} : { opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
@@ -227,7 +229,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
               {status === 'success' && (
                 <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={isMobile ? {} : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 text-center bg-green-50 text-green-700 border border-green-100 px-6 py-4 rounded-2xl font-bold"
                 >
@@ -236,7 +238,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               )}
               {status === 'error' && (
                 <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={isMobile ? {} : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 text-center bg-red-50 text-red-700 border border-red-100 px-6 py-4 rounded-2xl font-bold"
                 >

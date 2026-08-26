@@ -1,11 +1,8 @@
 "use client";
 
 import React from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { motion } from "framer-motion";
 import Link from "next/link";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const Pricing: React.FC = () => {
   const plans = [
@@ -22,6 +19,7 @@ const Pricing: React.FC = () => {
     {
       name: "ELITE",
       price: 1, // $1 for upgrade
+      variantId: "2028004", // LEMONSQUEEZY_PRO_VARIANT_ID
       description: [
         "Full AI style analysis (face, skin, body shape)",
         "Personalized clothing & color recommendations",
@@ -33,12 +31,12 @@ const Pricing: React.FC = () => {
     },
   ];
 
-  const handleCheckout = async (price: number) => {
+  const handleCheckout = async (variantId: string) => {
     try {
-      const res = await fetch("/api/create-checkout-session", {
+      const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: price * 100 }),
+        body: JSON.stringify({ variantId }),
       });
 
       if (!res.ok) {
@@ -52,7 +50,7 @@ const Pricing: React.FC = () => {
         window.location.href = data.url;
       }
     } catch (err) {
-      console.error("Stripe checkout error:", err);
+      console.error("Lemon Squeezy checkout error:", err);
     }
   };
 
@@ -136,7 +134,7 @@ const Pricing: React.FC = () => {
                 </Link>
               ) : (
                 <button
-                  onClick={() => handleCheckout(plan.price)}
+                  onClick={() => handleCheckout(plan.variantId || "")}
                   className="w-full py-5 rounded-2xl font-black text-brand-dark bg-brand-mint hover:bg-white transition-all shadow-lg shadow-brand-mint/30 active:scale-95"
                 >
                   Upgrade to Elite

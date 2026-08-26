@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Outfit from "../app/component/outfit/page";
 import Pallete from "../app/component/makeup/page";
 import AOS from "aos";
@@ -9,20 +9,18 @@ import Blog from "../app/component/blog";
 import About from "../app/component/about/page";
 import ColorAnalysis from "./component/ColorAnalysis";
 import FAQ from "./component/faq/page";
- 
- 
 
-export default function Home(){
-  useEffect(()=>{
+export default function Home() {
+  useEffect(() => {
     AOS.init({
-      easing:"ease-out-back",
+      easing: "ease-out-back",
       duration: 1200,
-      delay:100,
-      mirror:true,
+      delay: 100,
+      mirror: true,
       anchorPlacement: "bottom-bottom",
-      offset:160,
+      offset: 160,
     });
-  })
+  }, []);
 
  
   return (

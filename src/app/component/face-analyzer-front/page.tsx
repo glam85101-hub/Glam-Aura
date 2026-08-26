@@ -5,12 +5,14 @@ import { motion } from "framer-motion";
 import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/FaceAnalyzer";
 import FacialAnalysis, { Features } from "../facial-analysis/FacialAnalysis";
 import { Droplet, Smile, Sun, Camera, RefreshCw, Palette, Sparkles, Activity, Loader2 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 export default function FaceAnalyzerPage() {
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [result, setResult] = useState<FaceAnalysisResult | null>(null);
   const [showColors, setShowColors] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -45,7 +47,7 @@ export default function FaceAnalyzerPage() {
             Neural Scan
           </div>
           <motion.h1
-            initial={{ opacity: 0, y: -8 }}
+            initial={isMobile ? {} : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
@@ -61,7 +63,7 @@ export default function FaceAnalyzerPage() {
           {/* LEFT/CENTER: Camera Section */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={isMobile ? {} : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="relative aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 bg-black group"
             >
@@ -88,7 +90,7 @@ export default function FaceAnalyzerPage() {
                     onError={setError}
                     streamRef={streamRef}
                   />
-                  
+
                   {/* Overlay Controls */}
                   <div className="absolute top-6 left-6 flex items-center gap-3">
                     <div className="px-4 py-2 rounded-full bg-brand-dark/60 backdrop-blur-md border border-white/10 flex items-center gap-2">
@@ -106,7 +108,7 @@ export default function FaceAnalyzerPage() {
                 </>
               )}
             </motion.div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center justify-center text-center">
                   <Activity className="h-5 w-5 text-brand-teal mb-2" />
@@ -133,7 +135,7 @@ export default function FaceAnalyzerPage() {
 
           {/* RIGHT: Analysis Section */}
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
+            initial={isMobile ? {} : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl h-full flex flex-col"
           >
@@ -189,7 +191,7 @@ export default function FaceAnalyzerPage() {
 
                 {showColors && (
                   <motion.div 
-                    initial={{ opacity: 0, height: 0 }}
+                    initial={isMobile ? {} : { opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     className="pt-6 space-y-6 overflow-hidden"
                   >
@@ -200,7 +202,7 @@ export default function FaceAnalyzerPage() {
                         </span>
                       ))}
                     </div>
-                    
+
                     {result.palette && (
                       <div className="grid grid-cols-2 gap-3">
                         {result.palette.map((c, i) => (

@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Eye, Heart, Palette, User } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 // ✅ Export the interface
 export interface Features {
@@ -19,6 +20,7 @@ interface FacialAnalysisProps {
 }
 
 export default function FacialAnalysis({ features }: FacialAnalysisProps) {
+  const isMobile = useIsMobile();
   const analysisData = [
     {
       icon: Heart,
@@ -48,7 +50,7 @@ export default function FacialAnalysis({ features }: FacialAnalysisProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={isMobile ? {} : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       className="bg-white rounded-3xl p-8 shadow-lg"
@@ -62,7 +64,7 @@ export default function FacialAnalysis({ features }: FacialAnalysisProps) {
         {analysisData.map((item, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, x: -20 }}
+            initial={isMobile ? {} : { opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
             className="bg-[#46c7ab] rounded-2xl p-4 hover:bg-[#3bb199] transition-colors"
@@ -85,7 +87,7 @@ export default function FacialAnalysis({ features }: FacialAnalysisProps) {
 
       {/* Confidence Score */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={isMobile ? {} : { opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5 }}
         className="mt-6 bg-[#46c7ab] rounded-2xl p-4 border border-[#3bb199]"
@@ -97,7 +99,7 @@ export default function FacialAnalysis({ features }: FacialAnalysisProps) {
         <div className="w-full bg-gray-200 rounded-full h-2">
           <motion.div
             className="bg-[#3bb199] h-2 rounded-full"
-            initial={{ width: 0 }}
+            initial={isMobile ? {} : { width: 0 }}
             animate={{ width: '94%' }}
             transition={{ duration: 1, delay: 0.7 }}
           />

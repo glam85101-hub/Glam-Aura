@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 type FAQItem = {
   question: string;
@@ -45,6 +46,7 @@ const faqs: FAQItem[] = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -54,7 +56,7 @@ export default function FAQ() {
     <section className="bg-brand-beige py-24 px-6 overflow-hidden">
       <div className="container mx-auto max-w-4xl relative">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-brand-teal/5 rounded-full blur-3xl -z-10"></div>
-        
+
         {/* Section Heading */}
         <div className="mb-16 text-center" data-aos="fade-up">
           <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest">
@@ -73,7 +75,7 @@ export default function FAQ() {
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={isMobile ? {} : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
@@ -91,7 +93,7 @@ export default function FAQ() {
                   {faq.question}
                 </span>
                 <motion.div
-                  animate={{ rotate: openIndex === i ? 180 : 0 }}
+                  animate={isMobile ? {} : { rotate: openIndex === i ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                   className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${openIndex === i ? 'bg-brand-teal text-white' : 'bg-brand-teal/5 text-brand-teal'}`}
                 >
@@ -102,7 +104,7 @@ export default function FAQ() {
               <AnimatePresence initial={false}>
                 {openIndex === i && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
+                    initial={isMobile ? {} : { height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}

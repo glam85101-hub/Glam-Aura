@@ -1,41 +1,7 @@
 import type { NextRequest } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { createGenAI, generateWithRetry, GEMINI_MODEL } from "@/lib/gemini";
 
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY_4!);
-
-// ✅ Retry helper (same logic as your makeup API)
-async function generateWithRetry(
-  model: any,
-  payload: any,
-  retries = 3,
-  delay = 2000
-) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return await model.generateContent(payload);
-    } catch (err: any) {
-      const msg = err?.message?.toLowerCase() || "";
-
-      // If quota exceeded / 429 / 503 → throw special error
-      if (
-        msg.includes("quota") ||
-        msg.includes("429") ||
-        msg.includes("503") ||
-        msg.includes("overloaded")
-      ) {
-        throw new Error("HIGH_TRAFFIC");
-      }
-
-      if (i < retries - 1) {
-        console.warn(`Retrying Gemini... attempt ${i + 1}`);
-        await new Promise((res) => setTimeout(res, delay * (i + 1)));
-        continue;
-      }
-
-      throw err;
-    }
-  }
-}
+const genAI = createGenAI("GEMINI_API_KEY_4");
 
 export async function POST(req: NextRequest) {
   try {
@@ -61,7 +27,7 @@ suggestedPieces[].`;
     const userNote = note ? `Context: ${note}` : "";
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.5-flash",
+      model: GEMINI_MODEL,
     });
 
     const result = await generateWithRetry(model, {

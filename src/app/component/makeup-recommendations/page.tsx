@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 type MakeupAnalysis = {
   summary: string;
@@ -34,6 +35,7 @@ export default function MakeupAnalyzerPage() {
   const [analysis, setAnalysis] = useState<MakeupAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const isMobile = useIsMobile();
 
   const handleFile = (file: File) => {
     const reader = new FileReader();
@@ -51,7 +53,7 @@ export default function MakeupAnalyzerPage() {
         setImagePreview(compressedB64);
         setFileB64(compressedB64.split(",")[1]);
       };
-      img.src = e.target?.result;
+      img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -110,7 +112,7 @@ export default function MakeupAnalyzerPage() {
             AI Stylist
           </div>
           <motion.h1
-            initial={{ opacity: 0, y: -8 }}
+            initial={isMobile ? {} : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
@@ -125,12 +127,12 @@ export default function MakeupAnalyzerPage() {
         <section className="grid lg:grid-cols-2 gap-12 items-start">
           {/* LEFT: Upload & Controls */}
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
+            initial={isMobile ? {} : { opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl relative overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-teal/10 rounded-full blur-3xl -z-10 group-hover:bg-brand-teal/20 transition-colors" />
-            
+
             <div className="flex items-center gap-3 text-brand-teal font-bold text-sm uppercase tracking-widest mb-6">
               <Camera className="h-5 w-5" /> Image Input
             </div>
@@ -200,7 +202,7 @@ export default function MakeupAnalyzerPage() {
 
             {error && (
               <motion.p 
-                initial={{ opacity: 0, y: 10 }}
+                initial={isMobile ? {} : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400 font-medium text-center"
               >
@@ -211,7 +213,7 @@ export default function MakeupAnalyzerPage() {
 
           {/* RIGHT: Results */}
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
+            initial={isMobile ? {} : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl min-h-[500px] flex flex-col"
           >
@@ -242,7 +244,7 @@ export default function MakeupAnalyzerPage() {
                     if (k.toLowerCase().includes('eye')) Icon = Eye;
                     if (k.toLowerCase().includes('skin')) Icon = Droplet;
                     if (k.toLowerCase().includes('lip')) Icon = Smile;
-                    
+
                     return (
                       <div key={k} className="p-4 rounded-2xl bg-white/5 border border-white/10 group hover:border-brand-teal/30 transition-all">
                         <Icon className="h-4 w-4 text-brand-teal mb-3 group-hover:scale-110 transition-transform" />
