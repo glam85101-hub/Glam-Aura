@@ -5,71 +5,39 @@ import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [status, setStatus] = useState('');
+  const [result, setResult] = useState('');
   const isMobile = useIsMobile();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setStatus('sending');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setResult('Sending....');
 
-  try {
-    const form = new FormData();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '');
+    formData.append('to_email', 'glam85101@gmail.com');
+    formData.append('subject', 'New Contact Form Submission');
+    formData.append('autoresponse', 'Thank you for contacting me! I will reply soon.');
 
-    form.append(
-      'access_key',
-      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || ''
-    );
-
-    form.append('name', formData.name);
-    form.append('email', formData.email);
-    form.append('message', formData.message);
-    form.append('to_email', 'glam85101@gmail.com');
-
-    form.append(
-      'subject',
-      'New Contact Form Submission'
-    );
-
-    form.append(
-      'autoresponse',
-      'Thank you for contacting me! I will reply soon.'
-    );
-
-    const response = await fetch(
-      'https://api.web3forms.com/submit',
-      {
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: form,
-      }
-    );
-
-    const result = await response.json();
-
-    if (result.success) {
-      setStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
+        body: formData,
       });
-    } else {
-      throw new Error(result.message || 'Failed to send message');
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult('Form Submitted Successfully');
+        form.reset();
+      } else {
+        console.error(data);
+        setResult('Error');
+      }
+    } catch (error) {
+      console.error(error);
+      setResult('Error');
     }
-  } catch (error) {
-    console.error(error);
-    setStatus('error');
-  }
-};
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
   };
 
   return (
@@ -180,8 +148,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
                   placeholder="Jane Doe"
                   className="w-full px-6 py-4 bg-brand-beige/50 rounded-2xl border border-brand-teal/10 focus:border-brand-teal focus:bg-white transition-all duration-300 outline-none text-brand-dark placeholder:text-gray-400 font-medium"
                   required
@@ -193,8 +159,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
                   placeholder="jane@example.com"
                   className="w-full px-6 py-4 bg-brand-beige/50 rounded-2xl border border-brand-teal/10 focus:border-brand-teal focus:bg-white transition-all duration-300 outline-none text-brand-dark placeholder:text-gray-400 font-medium"
                   required
@@ -205,8 +169,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <label className="text-sm font-black text-brand-teal uppercase tracking-widest ml-1">Your Message</label>
                 <textarea
                   name="message"
-                  value={formData.message}
-                  onChange={handleChange}
                   placeholder="How can we help you?"
                   rows={4}
                   className="w-full px-6 py-4 bg-brand-beige/50 rounded-2xl border border-brand-teal/10 focus:border-brand-teal focus:bg-white transition-all duration-300 outline-none text-brand-dark placeholder:text-gray-400 font-medium resize-none"
@@ -216,18 +178,18 @@ const handleSubmit = async (e: React.FormEvent) => {
 
               <button
                 type="submit"
-                disabled={status === 'sending'}
+                disabled={result === 'Sending....'}
                 className="w-full pt-4 group"
               >
                 <div className="relative px-8 py-5 bg-brand-dark rounded-2xl text-white font-black text-lg hover:bg-brand-teal transition-all duration-300 shadow-xl shadow-brand-dark/20 active:scale-[0.98] flex items-center justify-center gap-3">
-                  {status === 'sending' ? (
+                  {result === 'Sending....' ? (
                     <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   ) : 'Send Message'}
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>
               </button>
 
-              {status === 'success' && (
+              {result === 'Form Submitted Successfully' && (
                 <motion.p 
                   initial={isMobile ? {} : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -236,7 +198,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   ✨ Message received! We'll be in touch shortly.
                 </motion.p>
               )}
-              {status === 'error' && (
+              {result === 'Error' && (
                 <motion.p 
                   initial={isMobile ? {} : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
