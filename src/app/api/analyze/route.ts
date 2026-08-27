@@ -1,12 +1,12 @@
 import type { NextRequest } from "next/server";
 import { createGenAI, generateWithRetry, GEMINI_MODEL } from "@/lib/gemini";
-import { getSession } from "@/lib/session";
 
 const genAI = createGenAI("GEMINI_API_KEY_4");
 
 export async function POST(req: NextRequest) {
   try {
     // Require authentication
+    const { getSession } = await import("@/lib/session");
     const session = await getSession();
     if (!session) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
