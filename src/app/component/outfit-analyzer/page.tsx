@@ -4,7 +4,8 @@ import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Upload, Sparkles, Shirt, Palette, X, ChevronRight, Check, Loader2, Crown } from 'lucide-react';
 import Image from 'next/image';
-import { SignInButton, useUser } from '@clerk/nextjs';
+import { useAuth } from '@/app/component/AuthProvider';
+import AuthModal from '@/components/AuthModal';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useUsage } from '@/hooks/use-usage';
 import UpgradeModal from '@/components/UpgradeModal';
@@ -103,9 +104,10 @@ export default function OutfitAnalyzerPage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn } = useAuth();
   const { canUse, isPro, recordUsage } = useUsage('outfit-analyzer');
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const canAnalyze = Boolean(fileB64 && isSignedIn && !loading);
 
   return (
@@ -209,9 +211,7 @@ export default function OutfitAnalyzerPage() {
             {!isLoaded ? null : !isSignedIn ? (
               <div className="mt-6 rounded-2xl border border-brand-teal/20 bg-brand-teal/5 p-6 text-center">
                 <p className="font-bold text-white mb-4">Sign in to unlock AI analysis</p>
-                <SignInButton mode="modal">
-                  <button className="w-full py-4 rounded-xl bg-brand-teal text-brand-dark font-black hover:bg-white transition-all">Connect Now</button>
-                </SignInButton>
+                <button onClick={() => setShowAuth(true)} className="w-full py-4 rounded-xl bg-brand-teal text-brand-dark font-black hover:bg-white transition-all">Connect Now</button>
               </div>
             ) : null}
 
@@ -307,6 +307,7 @@ export default function OutfitAnalyzerPage() {
       </div>
 
       <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureName="Outfit Analyzer" />
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
     </main>
   );
 }

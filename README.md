@@ -1,4 +1,4 @@
-# Facial Analyst
+# Glam Aura
 
 A **Next.js** web app that analyzes facial features and provides personalized recommendations for makeup, outfits, and skincare.
 
@@ -7,8 +7,8 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 ## ✨ Features
 - Real‑time face detection and landmark extraction using **face‑api.js**
 - AI‑generated insights powered by **Google Generative AI**
-- User authentication with **Clerk**
-- Stripe integration for paid plans
+- User authentication with **Better Auth**
+- Lemon Squeezy integration for paid plans
 - 3D visualisation with **react‑three‑fiber**
 - Component library built on **Radix UI** and **Tailwind CSS**
 
@@ -22,8 +22,8 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 | UI | **React 19**, **Tailwind CSS**, **Radix UI**, **Framer Motion** |
 | Face detection | **face‑api.js** |
 | AI generation | **@google/generative‑ai** |
-| Auth | **@clerk/nextjs** |
-| Payments | **Stripe** |
+| Auth | **better-auth** |
+| Payments | **Lemon Squeezy** |
 | Database | **Prisma** (PostgreSQL) |
 | 3D | **@react‑three/fiber**, **@react‑three/drei** |
 | Misc | **AOS**, **lucide‑react**, **clsx**, **class‑variance‑authority**, **tailwind‑merge**, **tailwindcss‑animate** |
@@ -36,33 +36,33 @@ A **Next.js** web app that analyzes facial features and provides personalized re
    git clone https://github.com/your‑org/facial‑analyst.git
    cd facial‑analyst
    ```
-2. **Install dependencies** (npm, yarn, pnpm, or bun – pick one)
+2. **Install dependencies**
    ```bash
-   npm install   # or yarn, pnpm, bun
+   npm install
    ```
-3. **Create a `.env.local` file** based on the example below.  Do **not** commit it.
+3. **Create a `.env.local` file**
    ```dotenv
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your‑clerk‑publishable‑key>
-   CLERK_SECRET_KEY=<your‑clerk‑secret-key>
+   BETTER_AUTH_SECRET=<your-random-secret>
+   BETTER_AUTH_URL=http://localhost:3000
 
    GEMINI_API_KEY_1=<google‑gemini‑key‑1>
    GEMINI_API_KEY_2=<google‑gemini‑key‑2>
    GEMINI_API_KEY_3=<google‑gemini‑key‑3>
-
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=<stripe‑publishable‑key>
-   STRIPE_SECRET_KEY=<stripe‑secret‑key>
-   STRIPE_PRICE_ID=<stripe‑price‑id>
+   GEMINI_API_KEY_4=<google‑gemini‑key‑4>
 
    NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
-   # PostgreSQL connection strings (choose one)
    DATABASE_URL=postgres://<user>:<pass>@<host>:<port>/<db>?sslmode=require
-   PRISMA_DATABASE_URL=prisma+postgres://<host>/…
+
+   LEMONSQUEEZY_API_KEY=<lemonsqueezy‑api‑key>
+   LEMONSQUEEZY_STORE_ID=<store‑id>
+   LEMONSQUEEZY_PRO_VARIANT_ID=<variant‑id>
+   LEMONSQUEEZY_WEBHOOK_SECRET=<webhook‑secret>
    ```
-4. **Set up the database** (if you haven't already)
+4. **Set up the database**
    ```bash
-   npx prisma migrate dev   # creates tables
-   npx prisma generate      # generates client types
+   npx prisma db push
+   npx prisma generate
    ```
 
 ---
@@ -84,22 +84,13 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 
 ---
 
-## 🧪 Testing
-The project currently relies on **Next.js** built‑in tests and manual UI verification. Add Jest or Cypress tests as needed and run them with:
-```bash
-npm test   # placeholder – configure your test runner
-```
-
----
-
 ## 📦 Packages
-Below is the list of runtime dependencies (see `package.json` for exact versions):
-- `@clerk/nextjs` – auth & user management
+- `better-auth` – auth & session management
 - `@google/generative-ai` – Gemini AI integration
 - `@prisma/client` – Prisma ORM client
 - `@radix-ui/*` – UI primitives (slider, slot, tabs, toast)
 - `@react-three/*` – 3D rendering
-- `@stripe/stripe-js` – Stripe client SDK
+- `@lemonsqueezy/lemonsqueezy.js` – Lemon Squeezy client SDK
 - `aos` – scroll animations
 - `face-api.js` – face detection & landmarks
 - `framer-motion` – animation library
@@ -107,17 +98,13 @@ Below is the list of runtime dependencies (see `package.json` for exact versions
 - `next` – React framework
 - `react`, `react-dom` – UI library
 - `react-icons` – additional icons
-- `stripe` – Stripe server SDK
 - `tailwind-merge`, `tailwindcss-animate` – Tailwind utilities
-
-Dev‑dependencies include ESLint, TypeScript, Tailwind CSS, and Netlify plugin.
 
 ---
 
 ## 📦 Deploying
 The app is ready to be deployed on **Vercel**, **Netlify**, or any platform that supports Next.js.
 ```bash
-# Vercel (recommended)
 vercel
 ```
 Make sure the required environment variables are set in the hosting dashboard.
@@ -126,11 +113,7 @@ Make sure the required environment variables are set in the hosting dashboard.
 
 ## 📖 Additional Resources
 - Next.js documentation – https://nextjs.org/docs
-- Clerk docs – https://clerk.dev/docs
+- Better Auth docs – https://www.better-auth.com
 - Prisma docs – https://www.prisma.io/docs
-- Stripe docs – https://stripe.com/docs
+- Lemon Squeezy docs – https://docs.lemonsqueezy.com
 - Gemini AI docs – https://ai.google.dev/gemini-api
-
----
-
-*Generated by Claude Code.*

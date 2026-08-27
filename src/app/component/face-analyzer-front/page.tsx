@@ -7,7 +7,8 @@ import FacialAnalysis, { Features } from "../facial-analysis/FacialAnalysis";
 import { Droplet, Smile, Sun, Camera, RefreshCw, Palette, Sparkles, Activity, Loader2, Crown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useUsage } from "@/hooks/use-usage";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { useAuth } from "@/app/component/AuthProvider";
+import AuthModal from "@/components/AuthModal";
 import UpgradeModal from "@/components/UpgradeModal";
 
 export default function FaceAnalyzerPage() {
@@ -17,14 +18,15 @@ export default function FaceAnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const { canUse, isPro, isLoaded, recordUsage } = useUsage("face-analyzer-front");
-  const { isSignedIn } = useUser();
+  const { isSignedIn } = useAuth();
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const usageRecordedRef = useRef(false);
 
   const streamRef = useRef<MediaStream | null>(null);
 
   const handleEnableCamera = () => {
-    if (!isSignedIn) return;
+    if (!isSignedIn) { setShowAuth(true); return; }
     if (!canUse) {
       setShowUpgrade(true);
       return;
@@ -251,17 +253,16 @@ export default function FaceAnalyzerPage() {
         {isLoaded && !isSignedIn && (
           <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8">
             <p className="text-gray-400 font-medium mb-4">Sign in to use AI features and track your free trials</p>
-            <SignInButton mode="modal">
-              <button className="px-8 py-4 bg-brand-teal text-brand-dark rounded-2xl font-black hover:bg-white transition-all">
-                Sign In
-              </button>
-            </SignInButton>
+            <button onClick={() => setShowAuth(true)} className="px-8 py-4 bg-brand-teal text-brand-dark rounded-2xl font-black hover:bg-white transition-all">
+              Sign In
+            </button>
           </div>
         )}
 
       </div>
 
       <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureName="Face & Skin Analyzer" />
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
     </main>
   );
 }

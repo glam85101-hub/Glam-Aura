@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/app/component/AuthProvider";
 
 export type FeatureKey =
   | "makeup-recommendations"
@@ -50,7 +50,7 @@ function saveUsageData(userId: string, data: Partial<Record<FeatureKey, number>>
 }
 
 export function useUsage(featureKey: FeatureKey) {
-  const { user, isSignedIn } = useUser();
+  const { user, isSignedIn } = useAuth();
   const [usageCount, setUsageCount] = useState<number>(0);
   const [isLoaded, setIsLoaded] = useState(false);
 

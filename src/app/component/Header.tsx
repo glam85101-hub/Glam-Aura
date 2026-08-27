@@ -3,18 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { useAuth } from "./AuthProvider";
+import AuthModal from "@/components/AuthModal";
+import { LogOut } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<"sign-in" | "sign-up">("sign-in");
   const pathname = usePathname();
+  const { user, isSignedIn, isLoaded, signOut } = useAuth();
 
   const links = [
     { label: "Home", href: "/" },
@@ -28,7 +27,6 @@ export default function Header() {
     { label: "Dashboard", href: "/component/usage-dashboard" },
   ];
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -36,6 +34,16 @@ export default function Header() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const openSignIn = () => {
+    setAuthMode("sign-in");
+    setShowAuthModal(true);
+  };
+
+  const openSignUp = () => {
+    setAuthMode("sign-up");
+    setShowAuthModal(true);
+  };
 
   if (!mounted) {
     return (
@@ -54,7 +62,6 @@ export default function Header() {
                 Glam<span className="text-brand-mint">Aura</span>
               </span>
             </Link>
-            {/* Desktop Links - Placeholder for SSR */}
             <div className="hidden md:flex items-center gap-8 text-white font-medium">
               {links.map((link) => (
                 <Link key={link.href} href={link.href} className="relative py-1">{link.label}</Link>
@@ -96,49 +103,40 @@ export default function Header() {
               </Link>
             ))}
             <div className="flex items-center gap-4 ml-4">
-              <SignedIn>
-                {authLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`relative py-1 transition-colors hover:text-brand-mint after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-mint after:transition-all hover:after:w-full ${pathname === link.href ? 'text-brand-mint after:w-full' : ''}`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </SignedIn>
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="px-5 py-2 text-white font-semibold hover:text-brand-mint transition-colors">
-                    Sign In
+              {isSignedIn && authLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative py-1 transition-colors hover:text-brand-mint after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-mint after:transition-all hover:after:w-full ${pathname === link.href ? 'text-brand-mint after:w-full' : ''}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              {!isSignedIn ? (
+                <>
+                  <button onClick={openSignIn} className="px-5 py-2 text-white font-semibold hover:text-brand-mint transition-colors">Sign In</button>
+                  <button onClick={openSignUp} className="px-5 py-2 bg-white text-brand-teal rounded-full font-bold shadow-md hover:bg-brand-mint hover:text-white hover:shadow-lg transition-all active:scale-95">Sign Up</button>
+                </>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-sm font-bold">
+                    {user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U"}
+                  </div>
+                  <button onClick={() => signOut()} className="p-2 text-white/60 hover:text-white transition-colors" title="Sign Out">
+                    <LogOut className="h-4 w-4" />
                   </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <button className="px-5 py-2 bg-white text-brand-teal rounded-full font-bold shadow-md hover:bg-brand-mint hover:text-white hover:shadow-lg transition-all active:scale-95">
-                    Sign Up
-                  </button>
-                </SignUpButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="p-0.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                  <UserButton 
-                    afterSignOutUrl="/" 
-                    appearance={{
-                      elements: {
-                        userButtonAvatarBox: "w-9 h-9"
-                      }
-                    }}
-                  />
                 </div>
-              </SignedIn>
+              )}
             </div>
           </div>
 
-          {/* Mobile Hamburger + UserButton */}
+          {/* Mobile Hamburger + Auth */}
           <div className="flex md:hidden items-center gap-4">
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            {isSignedIn && (
+              <button onClick={() => signOut()} className="p-2 text-white/60 hover:text-white transition-colors">
+                <LogOut className="h-5 w-5" />
+              </button>
+            )}
 
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -171,38 +169,33 @@ export default function Header() {
               </Link>
             ))}
 
-            <SignedIn>
-              {authLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`text-xl font-bold tracking-wide w-full text-center py-2 transition-colors ${pathname === link.href ? 'text-brand-mint' : 'text-white hover:text-brand-mint'}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </SignedIn>
+            {isSignedIn && authLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-xl font-bold tracking-wide w-full text-center py-2 transition-colors ${pathname === link.href ? 'text-brand-mint' : 'text-white hover:text-brand-mint'}`}
+              >
+                {link.label}
+              </Link>
+            ))}
 
-            <SignedOut>
+            {!isSignedIn && (
               <div className="flex flex-col w-full gap-4 mt-4 pt-6 border-t border-white/10">
-                <SignInButton mode="modal">
-                  <button className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-bold backdrop-blur-sm hover:bg-white/20 transition-all">
-                    Sign In
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <button className="w-full py-4 bg-brand-mint text-brand-teal rounded-2xl font-bold shadow-xl hover:bg-white transition-all active:scale-[0.98]">
-                    Join GlamAura
-                  </button>
-                </SignUpButton>
+                <button onClick={() => { setIsOpen(false); openSignIn(); }} className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-bold backdrop-blur-sm hover:bg-white/20 transition-all">Sign In</button>
+                <button onClick={() => { setIsOpen(false); openSignUp(); }} className="w-full py-4 bg-brand-mint text-brand-teal rounded-2xl font-bold shadow-xl hover:bg-white transition-all active:scale-[0.98]">Join GlamAura</button>
               </div>
-            </SignedOut>
+            )}
+
+            {isSignedIn && (
+              <button onClick={() => { setIsOpen(false); signOut(); }} className="w-full py-4 bg-red-500/20 border border-red-500/30 text-white rounded-2xl font-bold hover:bg-red-500/30 transition-all">Sign Out</button>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Spacer to prevent content hidden under fixed navbar */}
       <div className="h-16 md:h-16" />
+
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} initialMode={authMode} />
     </>
   );
 }

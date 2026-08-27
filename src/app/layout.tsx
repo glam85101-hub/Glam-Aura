@@ -2,17 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import Footer from "../app/component/Footer";
 import Header from "../app/component/Header";
-import RegisterClient from "../app/component/RegisterClient";
 import ChatBot from "../app/component/ChatBot";
+import { AuthProvider } from "../app/component/AuthProvider";
 
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
 import "./globals.css";
 
 // Fonts
@@ -40,20 +32,17 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-      <ClerkProvider> 
+    <AuthProvider>
     <html lang="en">
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
-                <RegisterClient /> {/* Har login ke baad user DB me register ho jayega */}
-
         <Header />
         {children}
         <Footer/>
         <ChatBot />
       </body>
     </html>
-    </ClerkProvider>              
-
+    </AuthProvider>
   );
 }

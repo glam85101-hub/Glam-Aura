@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { createGenAI, GEMINI_MODEL } from "@/lib/gemini";
+import { getSession } from "@/lib/session";
 
 const genAI = createGenAI("GEMINI_API_KEY_1");
 
@@ -69,6 +70,12 @@ Your Tone: Professional, sophisticated, and stylish. Always keep responses conci
 
 export async function POST(req: NextRequest) {
   try {
+    // Require authentication
+    const session = await getSession();
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const { message, history } = await req.json();
 
     if (!message) {

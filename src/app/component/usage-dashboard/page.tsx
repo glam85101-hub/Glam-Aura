@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useUser, SignInButton } from "@clerk/nextjs";
+import { useAuth } from "@/app/component/AuthProvider";
+
+import AuthModal from "@/components/AuthModal";
 import Link from "next/link";
 import { FEATURES, type FeatureKey } from "@/hooks/use-usage";
 import { useIsMobile } from "@/hooks/use-is-mobile";
@@ -19,7 +21,8 @@ function getUsageData(userId: string): Partial<Record<FeatureKey, number>> {
 }
 
 export default function UsageDashboard() {
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user, isSignedIn, isLoaded } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
   const isMobile = useIsMobile();
   const [usage, setUsage] = useState<Partial<Record<string, number>>>({});
 
@@ -71,13 +74,13 @@ export default function UsageDashboard() {
             <p className="text-gray-500 mb-8 font-medium">
               Sign in to track your feature usage and access your free trials.
             </p>
-            <SignInButton mode="modal">
-              <button className="w-full py-4 bg-brand-dark text-white rounded-2xl font-black text-lg hover:bg-brand-teal transition-all shadow-xl active:scale-[0.98]">
-                Sign In
-              </button>
-            </SignInButton>
+            <button onClick={() => setShowAuth(true)} className="w-full py-4 bg-brand-dark text-white rounded-2xl font-black text-lg hover:bg-brand-teal transition-all shadow-xl active:scale-[0.98]">
+              Sign In
+            </button>
+            <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
           </motion.div>
         ) : (
+          <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(Object.keys(FEATURES) as FeatureKey[]).map((key, idx) => {
               const feature = FEATURES[key];
@@ -164,6 +167,7 @@ export default function UsageDashboard() {
               );
             })}
           </div>
+          </>
         )}
       </div>
     </div>
