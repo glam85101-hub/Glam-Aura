@@ -31,7 +31,7 @@ export default function GlobalError({
             />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Something went wrong!</h2>
         <p className="text-gray-400 mb-6">
           We encountered an unexpected error. Please try again.
         </p>
