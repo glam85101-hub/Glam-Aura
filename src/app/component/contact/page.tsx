@@ -14,7 +14,7 @@ export default function Contact() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '');
+    formData.append('access_key', '078fa6cb-6b01-4e8a-ad43-20df68e86e93');
     formData.append('to_email', 'glam85101@gmail.com');
     formData.append('subject', 'New Contact Form Submission');
     formData.append('autoresponse', 'Thank you for contacting me! I will reply soon.');
