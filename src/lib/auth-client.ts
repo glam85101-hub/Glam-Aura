@@ -1,7 +1,9 @@
 import { createAuthClient } from "better-auth/client";
 
+// Empty baseURL = relative requests (same origin)
+// Works on localhost:3000 AND personal-styling.xyz automatically
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+  baseURL: "",
 });
 
 export const { signIn, signUp, signOut, useSession } = authClient;
