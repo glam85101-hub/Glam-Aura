@@ -113,10 +113,7 @@ export default function Header() {
                 </Link>
               ))}
               {!isSignedIn ? (
-                <>
-                  <button onClick={openSignIn} className="px-5 py-2 text-white font-semibold hover:text-brand-mint transition-colors">Sign In</button>
-                  <button onClick={openSignUp} className="px-5 py-2 bg-white text-brand-teal rounded-full font-bold shadow-md hover:bg-brand-mint hover:text-white hover:shadow-lg transition-all active:scale-95">Sign Up</button>
-                </>
+                <button onClick={openSignIn} className="px-6 py-2 bg-white text-brand-teal rounded-full font-bold shadow-md hover:bg-brand-mint hover:text-white hover:shadow-lg transition-all active:scale-95">Get Started</button>
               ) : (
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-sm font-bold">
@@ -180,10 +177,7 @@ export default function Header() {
             ))}
 
             {!isSignedIn && (
-              <div className="flex flex-col w-full gap-4 mt-4 pt-6 border-t border-white/10">
-                <button onClick={() => { setIsOpen(false); openSignIn(); }} className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-bold backdrop-blur-sm hover:bg-white/20 transition-all">Sign In</button>
-                <button onClick={() => { setIsOpen(false); openSignUp(); }} className="w-full py-4 bg-brand-mint text-brand-teal rounded-2xl font-bold shadow-xl hover:bg-white transition-all active:scale-[0.98]">Join GlamAura</button>
-              </div>
+              <button onClick={() => { setIsOpen(false); openSignIn(); }} className="w-full py-4 bg-brand-mint text-brand-teal rounded-2xl font-bold shadow-xl hover:bg-white transition-all active:scale-[0.98] mt-4 pt-6 border-t border-white/10">Get Started</button>
             )}
 
             {isSignedIn && (
