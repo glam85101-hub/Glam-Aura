@@ -2,10 +2,12 @@
 
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Camera, Upload, Sparkles, Shirt, Palette, X, ChevronRight, Check, Loader2 } from 'lucide-react';
+import { Camera, Upload, Sparkles, Shirt, Palette, X, ChevronRight, Check, Loader2, Crown } from 'lucide-react';
 import Image from 'next/image';
 import { SignInButton, useUser } from '@clerk/nextjs';
 import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useUsage } from '@/hooks/use-usage';
+import UpgradeModal from '@/components/UpgradeModal';
 
 type Analysis = {
   verdict: string;
@@ -62,6 +64,10 @@ export default function OutfitAnalyzerPage() {
   };
 
   const analyze = async () => {
+    if (!canUse) {
+      setShowUpgrade(true);
+      return;
+    }
     setLoading(true);
     setError(null);
     setAnalysis(null);
@@ -77,6 +83,7 @@ export default function OutfitAnalyzerPage() {
       }
       setAnalysis(data.analysis as Analysis);
       setWarning(data.warning || null);
+      recordUsage();
     } catch (err: any) {
       const errorMsg = err.message || 'Something went wrong';
       setError(errorMsg);
@@ -97,6 +104,8 @@ export default function OutfitAnalyzerPage() {
   };
 
   const { isLoaded, isSignedIn } = useUser();
+  const { canUse, isPro, recordUsage } = useUsage('outfit-analyzer');
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const canAnalyze = Boolean(fileB64 && isSignedIn && !loading);
 
   return (
@@ -170,12 +179,27 @@ export default function OutfitAnalyzerPage() {
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={analyze}
-                disabled={!canAnalyze}
-                className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl bg-brand-teal px-8 py-4 text-brand-dark font-black text-lg shadow-xl shadow-brand-teal/20 hover:bg-white transition-all transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:transform-none"
+                onClick={isPro ? () => setShowUpgrade(true) : analyze}
+                disabled={!isPro && !canAnalyze}
+                className={`flex-1 inline-flex items-center justify-center gap-3 rounded-2xl px-8 py-4 font-black text-lg shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 ${
+                  isPro
+                    ? "bg-brand-dark text-white hover:bg-brand-teal shadow-brand-dark/20"
+                    : "bg-brand-teal text-brand-dark hover:bg-white shadow-brand-teal/20 disabled:opacity-50 disabled:transform-none"
+                }`}
               >
-                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                Analyze Outfit
+                {isPro ? (
+                  <>
+                    <Crown className="h-5 w-5" />
+                    Upgrade to Pro
+                  </>
+                ) : loading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <>
+                    <Sparkles className="h-5 w-5" />
+                    Analyze Outfit
+                  </>
+                )}
               </button>
               <button onClick={reset} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-white font-bold hover:bg-white/10 transition-all">
                 <Shirt className="h-4 w-4" /> Reset
@@ -279,7 +303,10 @@ export default function OutfitAnalyzerPage() {
             )}
           </motion.div>
         </section>
+
       </div>
+
+      <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureName="Outfit Analyzer" />
     </main>
   );
 }

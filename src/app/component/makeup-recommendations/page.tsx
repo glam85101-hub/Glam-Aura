@@ -14,10 +14,14 @@ import {
   Eye,
   Droplet,
   Smile,
+  Crown,
 } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useUsage } from "@/hooks/use-usage";
+import { SignInButton, useUser } from "@clerk/nextjs";
+import UpgradeModal from "@/components/UpgradeModal";
 
 type MakeupAnalysis = {
   summary: string;
@@ -36,6 +40,9 @@ export default function MakeupAnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isMobile = useIsMobile();
+  const { canUse, isPro, isLoaded, recordUsage } = useUsage("makeup-recommendations");
+  const { isSignedIn } = useUser();
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const handleFile = (file: File) => {
     const reader = new FileReader();
@@ -69,6 +76,11 @@ export default function MakeupAnalyzerPage() {
 
   const analyze = async () => {
     if (!fileB64) return;
+    if (!isSignedIn) return;
+    if (!canUse) {
+      setShowUpgrade(true);
+      return;
+    }
     setLoading(true);
     setError(null);
     setAnalysis(null);
@@ -84,6 +96,7 @@ export default function MakeupAnalyzerPage() {
         throw new Error(data.error || "Analysis failed - please try a clearer photo");
       }
       setAnalysis(data.analysis);
+      recordUsage();
       toast({ title: "Success!", description: "Makeup analysis complete" });
     } catch (err: any) {
       console.error(err);
@@ -181,16 +194,27 @@ export default function MakeupAnalyzerPage() {
             {/* Action Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={analyze}
-                disabled={loading || !fileB64}
-                className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl bg-brand-teal px-8 py-4 text-brand-dark font-black text-lg shadow-xl shadow-brand-teal/20 hover:bg-white transition-all transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:transform-none"
+                onClick={isPro ? () => setShowUpgrade(true) : analyze}
+                disabled={loading || (!isPro && !fileB64)}
+                className={`flex-1 inline-flex items-center justify-center gap-3 rounded-2xl px-8 py-4 font-black text-lg shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 ${
+                  isPro
+                    ? "bg-brand-dark text-white hover:bg-brand-teal shadow-brand-dark/20"
+                    : "bg-brand-teal text-brand-dark hover:bg-white shadow-brand-teal/20 disabled:opacity-50 disabled:transform-none"
+                }`}
               >
-                {loading ? (
+                {isPro ? (
+                  <>
+                    <Crown className="h-5 w-5" />
+                    Upgrade to Pro
+                  </>
+                ) : loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <Sparkles className="h-5 w-5" />
+                  <>
+                    <Sparkles className="h-5 w-5" />
+                    Analyze Features
+                  </>
                 )}
-                Analyze Features
               </button>
               <button
                 onClick={reset}
@@ -313,7 +337,22 @@ export default function MakeupAnalyzerPage() {
             )}
           </motion.div>
         </section>
+
+        {/* Sign-in prompt */}
+        {isLoaded && !isSignedIn && (
+          <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8">
+            <p className="text-gray-400 font-medium mb-4">Sign in to use AI features and track your free trials</p>
+            <SignInButton mode="modal">
+              <button className="px-8 py-4 bg-brand-teal text-brand-dark rounded-2xl font-black hover:bg-white transition-all">
+                Sign In
+              </button>
+            </SignInButton>
+          </div>
+        )}
+
       </div>
+
+      <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureName="Makeup Recommendations" />
     </main>
   );
 }

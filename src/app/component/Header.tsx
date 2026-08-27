@@ -24,6 +24,10 @@ export default function Header() {
     { label: "Contact", href: "/component/contact" },
   ];
 
+  const authLinks = [
+    { label: "Dashboard", href: "/component/usage-dashboard" },
+  ];
+
   // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
@@ -92,6 +96,17 @@ export default function Header() {
               </Link>
             ))}
             <div className="flex items-center gap-4 ml-4">
+              <SignedIn>
+                {authLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`relative py-1 transition-colors hover:text-brand-mint after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-mint after:transition-all hover:after:w-full ${pathname === link.href ? 'text-brand-mint after:w-full' : ''}`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </SignedIn>
               <SignedOut>
                 <SignInButton mode="modal">
                   <button className="px-5 py-2 text-white font-semibold hover:text-brand-mint transition-colors">
@@ -155,6 +170,18 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+
+            <SignedIn>
+              {authLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-xl font-bold tracking-wide w-full text-center py-2 transition-colors ${pathname === link.href ? 'text-brand-mint' : 'text-white hover:text-brand-mint'}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </SignedIn>
 
             <SignedOut>
               <div className="flex flex-col w-full gap-4 mt-4 pt-6 border-t border-white/10">

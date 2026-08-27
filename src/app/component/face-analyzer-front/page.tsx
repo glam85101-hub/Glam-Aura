@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/FaceAnalyzer";
 import FacialAnalysis, { Features } from "../facial-analysis/FacialAnalysis";
-import { Droplet, Smile, Sun, Camera, RefreshCw, Palette, Sparkles, Activity, Loader2 } from "lucide-react";
+import { Droplet, Smile, Sun, Camera, RefreshCw, Palette, Sparkles, Activity, Loader2, Crown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useUsage } from "@/hooks/use-usage";
+import { SignInButton, useUser } from "@clerk/nextjs";
+import UpgradeModal from "@/components/UpgradeModal";
 
 export default function FaceAnalyzerPage() {
   const [cameraEnabled, setCameraEnabled] = useState(false);
@@ -13,10 +16,19 @@ export default function FaceAnalyzerPage() {
   const [showColors, setShowColors] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
+  const { canUse, isPro, isLoaded, recordUsage } = useUsage("face-analyzer-front");
+  const { isSignedIn } = useUser();
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const usageRecordedRef = useRef(false);
 
   const streamRef = useRef<MediaStream | null>(null);
 
   const handleEnableCamera = () => {
+    if (!isSignedIn) return;
+    if (!canUse) {
+      setShowUpgrade(true);
+      return;
+    }
     setCameraEnabled(true);
     setError(null);
   };
@@ -73,10 +85,18 @@ export default function FaceAnalyzerPage() {
                     <Camera className="h-10 w-10" />
                   </div>
                   <button
-                    onClick={handleEnableCamera}
-                    className="px-10 py-4 bg-brand-teal text-brand-dark font-black rounded-2xl shadow-xl shadow-brand-teal/20 hover:bg-white transition-all transform hover:-translate-y-1"
+                    onClick={isPro ? () => setShowUpgrade(true) : handleEnableCamera}
+                    className={`px-10 py-4 font-black rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 ${
+                      isPro
+                        ? "bg-brand-dark text-white hover:bg-brand-teal shadow-brand-dark/20"
+                        : "bg-brand-teal text-brand-dark hover:bg-white shadow-brand-teal/20"
+                    }`}
                   >
-                    Activate AI Scanner
+                    {isPro ? (
+                      <span className="flex items-center gap-2">
+                        <Crown className="h-5 w-5" /> Upgrade to Pro
+                      </span>
+                    ) : "Activate AI Scanner"}
                   </button>
                 </div>
               ) : (
@@ -86,6 +106,10 @@ export default function FaceAnalyzerPage() {
                     onResult={(res) => {
                       setResult(res);
                       setError(null);
+                      if (!usageRecordedRef.current) {
+                        usageRecordedRef.current = true;
+                        recordUsage();
+                      }
                     }}
                     onError={setError}
                     streamRef={streamRef}
@@ -222,7 +246,22 @@ export default function FaceAnalyzerPage() {
             )}
           </motion.div>
         </div>
+
+        {/* Sign-in prompt */}
+        {isLoaded && !isSignedIn && (
+          <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8">
+            <p className="text-gray-400 font-medium mb-4">Sign in to use AI features and track your free trials</p>
+            <SignInButton mode="modal">
+              <button className="px-8 py-4 bg-brand-teal text-brand-dark rounded-2xl font-black hover:bg-white transition-all">
+                Sign In
+              </button>
+            </SignInButton>
+          </div>
+        )}
+
       </div>
+
+      <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureName="Face & Skin Analyzer" />
     </main>
   );
 }
