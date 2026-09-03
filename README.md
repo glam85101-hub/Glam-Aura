@@ -102,7 +102,7 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 
 ---
 
-## 📦 Deploying
+##  Deploying
 The app is ready to be deployed on **Vercel**, **Netlify**, or any platform that supports Next.js.
 ```bash
 vercel
