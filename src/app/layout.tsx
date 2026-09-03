@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import Footer from "../app/component/Footer";
 import Header from "../app/component/Header";
 import ChatBot from "../app/component/ChatBot";
@@ -14,11 +14,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const robotoMono = Roboto_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+
 
 export const metadata: Metadata = {
   title: "Glam Aura",
@@ -35,7 +31,7 @@ export default function RootLayout({
     <AuthProvider>
     <html lang="en">
       <body
-        className={`${inter.variable} ${robotoMono.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
         <Header />
         {children}

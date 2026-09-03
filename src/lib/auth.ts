@@ -16,6 +16,7 @@ function getPrisma() {
 }
 
 export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET || "glam-aura-default-secret-change-me-in-production",
   // Lazy adapter — getPrisma() is only called at runtime
   database: prismaAdapter(getPrisma(), {
     provider: "postgresql",

@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 
 function MakeupFeature() {
   return (
-    <section className="bg-brand-beige py-10 overflow-hidden relative rounded-3xl">
+    <section className="bg-brand-beige py-8 overflow-hidden relative rounded-3xl">
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-brand-mint/5 rounded-full blur-3xl -z-10 animate-pulse"></div>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
         <div data-aos="fade-right" className="relative z-10 order-2 lg:order-1">
           <div className="flex items-center gap-3 mb-6">
             <div className="inline-block px-4 py-1.5 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-sm uppercase tracking-wider">
@@ -71,9 +71,9 @@ function MakeupFeature() {
 
 function OutfitFeature() {
   return (
-    <section className="bg-brand-beige py-10 overflow-hidden relative rounded-3xl">
+    <section className="bg-brand-beige py-8 overflow-hidden relative rounded-3xl">
       <div className="absolute top-0 right-0 w-80 h-80 bg-brand-teal/5 rounded-full blur-3xl -z-10"></div>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
         <div className="relative flex justify-center lg:justify-start" data-aos="fade-right">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-brand-mint/5 rounded-full blur-3xl -z-10 animate-pulse"></div>
           <div className="relative w-[280px] sm:w-[320px] aspect-[9/18.5] bg-brand-dark rounded-[3rem] shadow-2xl overflow-hidden border-[8px] border-brand-dark ring-4 ring-white/10 group transition-transform duration-500 hover:scale-[1.02]">
@@ -132,8 +132,8 @@ function OutfitFeature() {
 
 function SkinAnalysisFeature() {
   return (
-    <section className="bg-brand-beige py-10 overflow-hidden rounded-3xl">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+    <section className="bg-brand-beige py-8 overflow-hidden rounded-3xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
         <div data-aos="fade-right" className="relative z-10">
           <div className="flex items-center gap-3 mb-6">
             <div className="inline-block px-4 py-1.5 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-sm uppercase tracking-wider">
@@ -203,8 +203,8 @@ function SkinAnalysisFeature() {
 export default function Features() {
   return (
     <section className="bg-[#f8f2ef] text-black body-font min-h-screen">
-      <div className="container px-5 py-16 mx-auto max-w-7xl">
-        <div className="text-center mb-10">
+      <div className="container px-4 sm:px-6 py-12 mx-auto max-w-7xl">
+        <div className="text-center mb-8">
           <h2 className="tracking-widest text-xs font-semibold text-[#46c7ab] mb-2 uppercase">
             Glam-Aura Suite
           </h2>
@@ -216,24 +216,18 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="space-y-10">
-          <div className="bg-white rounded-3xl shadow-lg border border-brand-teal/5">
-            <MakeupFeature />
-          </div>
+        <div className="space-y-6">
+          <MakeupFeature />
 
-          <div className="bg-white rounded-3xl shadow-lg border border-brand-teal/5">
-            <OutfitFeature />
-          </div>
+          <OutfitFeature />
 
-          <div className="bg-white rounded-3xl shadow-lg border border-brand-teal/5">
-            <SkinAnalysisFeature />
-          </div>
+          <SkinAnalysisFeature />
           
-          <div className="bg-white rounded-3xl shadow-lg border border-brand-teal/5 p-10 text-center">
+          <div className="bg-white rounded-3xl shadow-lg border border-brand-teal/5 p-8 text-center">
             <div className="inline-block px-4 py-1.5 mb-5 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-sm uppercase tracking-wider">
               Upcoming
             </div>
-            <h2 className="text-3xl font-bold mb-3">Facial Landmark Testing</h2>
+            <h2 className="text-3xl font-bold mb-2">Facial Landmark Testing</h2>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
               We are currently testing advanced facial landmark detection to provide even more precise styling advice.
             </p>
