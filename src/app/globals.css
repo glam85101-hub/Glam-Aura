@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  @apply text-brand-dark bg-brand-beige selection:bg-brand-teal/20 selection:text-brand-teal;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-brand-beige;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-brand-teal/20 rounded-full border-4 border-brand-beige hover:bg-brand-teal/40 transition-colors;
+}
