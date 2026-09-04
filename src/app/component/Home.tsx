@@ -56,13 +56,13 @@ function Particles() {
   );
 }
 
-export default function ColorAnalysis() {
+export default function HomePage() {
   const features = [
   {
     title: "Smart Color Matching",
     desc: "Discover colors that naturally complement your unique skin tone and features.",
     icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
-    href: "/component/skin-analyzer",
+    href: "/component/face",
   },
   {
     title: "Personalized Outfits",

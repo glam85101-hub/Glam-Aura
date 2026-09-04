@@ -45,10 +45,10 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-6 text-white uppercase tracking-widest text-sm">Services</h3>
             <ul className="space-y-4 text-gray-400 font-medium">
-              <li><Link href="/component/skin-analyzer" className="hover:text-brand-teal transition-colors">Skin Analysis</Link></li>
+
               <li><Link href="/component/makeup" className="hover:text-brand-teal transition-colors">Makeup Guide</Link></li>
               <li><Link href="/component/outfit" className="hover:text-brand-teal transition-colors">Outfit Checker</Link></li>
-              <li><Link href="/component/facial-analysis" className="hover:text-brand-teal transition-colors">Facial Analysis</Link></li>
+              <li><Link href="/component/face" className="hover:text-brand-teal transition-colors">Facial Analysis</Link></li>
             </ul>
           </div>
 

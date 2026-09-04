@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 import Blog from "../app/component/blog";
 import About from "../app/component/about/page";
-import ColorAnalysis from "./component/ColorAnalysis";
+import HomePage from "./component/Home";
 import FAQ from "./component/faq/page";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <div> 
  
-  <ColorAnalysis />
+  <HomePage />
   <Pallete/>
  <About />
  <Outfit/>
