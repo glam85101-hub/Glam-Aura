@@ -14,7 +14,7 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 | Layer | Technology |
 |-------|------------|
 | Framework | **Next.js 16** |
