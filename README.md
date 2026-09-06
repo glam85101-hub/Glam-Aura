@@ -30,7 +30,7 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 
 ---
 
-## 📦 Installation
+## Installation
 1. **Clone the repo**
    ```bash
    git clone https://github.com/your‑org/facial‑analyst.git
