@@ -4,7 +4,7 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 
 ---
 
-## ✨ Features
+##  Features
 - Real‑time face detection and landmark extraction using **face‑api.js**
 - AI‑generated insights powered by **Google Generative AI**
 - User authentication with **Better Auth**
