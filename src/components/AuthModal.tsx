@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Lock, User, Loader2 } from "lucide-react";
-import { useAuth } from "@/app/component/AuthProvider";
+import { useAuth } from "@/components/AuthProvider";
 
 type AuthModalProps = {
   isOpen: boolean;

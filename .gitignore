@@ -29,6 +29,9 @@ yarn-error.log*
 .env*.local
 .env.local
 .env
+
+# mobile visual check screenshots
+.mobile-screenshots/
 # vercel
 .vercel
 

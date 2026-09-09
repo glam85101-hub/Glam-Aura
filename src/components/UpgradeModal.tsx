@@ -91,7 +91,7 @@ export default function UpgradeModal({ isOpen, onClose, featureName }: UpgradeMo
 
               {/* CTA buttons */}
               <Link
-                href="/component/pricing"
+                href="/pricing"
                 className="block w-full py-4 bg-brand-dark text-white rounded-2xl font-black text-lg hover:bg-brand-teal transition-all shadow-xl shadow-brand-dark/20 active:scale-[0.98]"
               >
                 Upgrade to Elite — $1

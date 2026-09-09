@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
-import Footer from "../app/component/Footer";
-import Header from "../app/component/Header";
-import ChatBot from "../app/component/ChatBot";
-import { AuthProvider } from "../app/component/AuthProvider";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import ChatBot from "../components/ChatBot";
+import { AuthProvider } from "../components/AuthProvider";
 
 import "./globals.css";
 
@@ -23,9 +23,6 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   title: "Glam Aura",
   description: "Created by Faria & Humema",
-  icons: {
-    icon: "/logo2.png",
-  },
 };
 
 export default function RootLayout({

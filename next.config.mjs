@@ -81,6 +81,37 @@ const nextConfig = {
         destination: "/",
         permanent: true,
       },
+      // Legacy /component/* routes (renamed routes first, catchall last)
+      {
+        source: "/component/face-analyzer-front",
+        destination: "/face-analyzer",
+        permanent: true,
+      },
+      {
+        source: "/component/makeup-recommendations",
+        destination: "/makeup-guide",
+        permanent: true,
+      },
+      {
+        source: "/component/outfit-analyzer",
+        destination: "/outfit-checker",
+        permanent: true,
+      },
+      {
+        source: "/component/usage-dashboard",
+        destination: "/dashboard",
+        permanent: true,
+      },
+      {
+        source: "/component/terms-and-conditions",
+        destination: "/terms",
+        permanent: true,
+      },
+      {
+        source: "/component/:path*",
+        destination: "/:path*",
+        permanent: true,
+      },
     ];
   },
 };

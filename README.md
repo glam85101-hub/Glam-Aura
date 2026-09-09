@@ -33,14 +33,19 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 ## 📦 Installation
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/your‑org/facial‑analyst.git
-   cd facial‑analyst
+   git clone https://github.com/<your-username>/glam-aura.git
+   cd glam-aura
+   ```
+
+   Or start from the `.env.example` template:
+   ```bash
+   cp .env.example .env.local   # then fill in your values
    ```
 2. **Install dependencies**
    ```bash
    npm install
    ```
-3. **Create a `.env.local` file**
+3. **Create a `.env.local` file** (or run `cp .env.example .env.local` and fill in your values)
    ```dotenv
    BETTER_AUTH_SECRET=<your-random-secret>
    BETTER_AUTH_URL=http://localhost:3000
@@ -72,33 +77,15 @@ A **Next.js** web app that analyzes facial features and provides personalized re
   ```bash
   npm run dev   # http://localhost:3000
   ```
+- **Linting**
+  ```bash
+  npm run lint
+  ```
 - **Production build**
   ```bash
   npm run build
   npm start
   ```
-- **Linting**
-  ```bash
-  npm run lint
-  ```
-
----
-
-## Packages
-- `better-auth` – auth & session management
-- `@google/generative-ai` – Gemini AI integration
-- `@prisma/client` – Prisma ORM client
-- `@radix-ui/*` – UI primitives (slider, slot, tabs, toast)
-- `@react-three/*` – 3D rendering
-- `@lemonsqueezy/lemonsqueezy.js` – Lemon Squeezy client SDK
-- `aos` – scroll animations
-- `face-api.js` – face detection & landmarks
-- `framer-motion` – animation library
-- `lucide-react` – icon set
-- `next` – React framework
-- `react`, `react-dom` – UI library
-- `react-icons` – additional icons
-- `tailwind-merge`, `tailwindcss-animate` – Tailwind utilities
 
 ---
 

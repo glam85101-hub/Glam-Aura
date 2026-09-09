@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "@/app/component/AuthProvider";
+import { useAuth } from "@/components/AuthProvider";
 
 export type FeatureKey =
   | "makeup-recommendations"
@@ -15,17 +15,17 @@ export const FEATURES: Record<
   "makeup-recommendations": {
     name: "Makeup Recommendations",
     description: "AI-powered makeup shade and technique suggestions",
-    href: "/component/makeup-recommendations",
+    href: "/makeup-guide",
   },
   "outfit-analyzer": {
     name: "Outfit Analyzer",
     description: "Get instant feedback on your outfit style and coordination",
-    href: "/component/outfit-analyzer",
+    href: "/outfit-checker",
   },
   "face-analyzer-front": {
     name: "Face & Skin Analyzer",
     description: "Detect skin undertones, seasonal palettes, and facial features",
-    href: "/component/face-analyzer-front",
+    href: "/face-analyzer",
   },
 };
 

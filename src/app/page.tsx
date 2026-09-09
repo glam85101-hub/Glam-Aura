@@ -1,14 +1,14 @@
 "use client";
-import Outfit from "../app/component/outfit/page";
-import Pallete from "../app/component/makeup/page";
+import Outfit from "../app/outfit/page";
+import Pallete from "../app/makeup/page";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 
-import Blog from "../app/component/blog";
-import About from "../app/component/about/page";
-import HomePage from "./component/Home";
-import FAQ from "./component/faq/page";
+import Blog from "../components/Blog";
+import About from "../app/about/page";
+import HomePage from "../components/Home";
+import FAQ from "./faq/page";
 
 export default function Home() {
   useEffect(() => {
