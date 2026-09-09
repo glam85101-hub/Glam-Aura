@@ -41,7 +41,7 @@ export default function MakeupAnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isMobile = useIsMobile();
-  const { canUse, isPro, isLoaded, recordUsage } = useUsage("makeup-recommendations");
+  const { canUse, isPro, exhausted, isLoaded, recordUsage } = useUsage("makeup-recommendations");
   const { isSignedIn } = useAuth();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
@@ -196,15 +196,15 @@ export default function MakeupAnalyzerPage() {
             {/* Action Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={isPro ? () => setShowUpgrade(true) : analyze}
-                disabled={loading || (!isPro && !fileB64)}
+                onClick={exhausted ? () => setShowUpgrade(true) : analyze}
+                disabled={loading || (!exhausted && !fileB64)}
                 className={`flex-1 inline-flex items-center justify-center gap-3 rounded-2xl px-8 py-4 font-black text-lg shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 ${
-                  isPro
+                  exhausted
                     ? "bg-brand-dark text-white hover:bg-brand-teal shadow-brand-dark/20"
                     : "bg-brand-teal text-brand-dark hover:bg-white shadow-brand-teal/20 disabled:opacity-50 disabled:transform-none"
                 }`}
               >
-                {isPro ? (
+                {exhausted ? (
                   <>
                     <Crown className="h-5 w-5" />
                     Upgrade to Pro

@@ -22,9 +22,9 @@ export default function Footer() {
               Elevating your style with the precision of Artificial Intelligence.
             </p>
             <div className="flex gap-5 text-2xl text-gray-400">
-              <a href="https://www.instagram.com/glamaura387/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaInstagram /></a>
-              <a href="https://x.com/HumemaA44967" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaTwitter /></a>
-              <a href="https://www.facebook.com/profile.php?id=61583609165895" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaFacebook /></a>
+              <a href="https://www.instagram.com/theglamaura.ai/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaInstagram /></a>
+              <a href="https://x.com/glamaura_hq" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaTwitter /></a>
+              <a href="https://www.facebook.com/profile.php?id=61594174227128" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaFacebook /></a>
               <a href="https://www.linkedin.com/company/glamaura-studio" target="_blank" rel="noopener noreferrer" className="hover:text-brand-teal transition-all hover:-translate-y-1"><FaLinkedin /></a>
             </div>
           </div>

@@ -8,80 +8,89 @@ export type FeatureKey =
   | "outfit-analyzer"
   | "face-analyzer-front";
 
-export const FEATURES: Record<FeatureKey, { name: string; description: string; icon: string; href: string }> = {
+export const FEATURES: Record<
+  FeatureKey,
+  { name: string; description: string; href: string }
+> = {
   "makeup-recommendations": {
     name: "Makeup Recommendations",
     description: "AI-powered makeup shade and technique suggestions",
-    icon: "💄",
     href: "/component/makeup-recommendations",
   },
   "outfit-analyzer": {
     name: "Outfit Analyzer",
     description: "Get instant feedback on your outfit style and coordination",
-    icon: "👗",
     href: "/component/outfit-analyzer",
   },
   "face-analyzer-front": {
     name: "Face & Skin Analyzer",
     description: "Detect skin undertones, seasonal palettes, and facial features",
-    icon: "🪞",
     href: "/component/face-analyzer-front",
   },
 };
 
-const FREE_TRIALS = 1;
+export type UsageStatus = {
+  feature: FeatureKey;
+  used: number;
+  limit: number;
+  remaining: number;
+  canUse: boolean;
+  isPremium: boolean;
+};
 
-function getStorageKey(userId: string): string {
-  return `glam_aura_usage_${userId}`;
-}
-
-function getUsageData(userId: string): Partial<Record<FeatureKey, number>> {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = localStorage.getItem(getStorageKey(userId));
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveUsageData(userId: string, data: Partial<Record<FeatureKey, number>>) {
-  localStorage.setItem(getStorageKey(userId), JSON.stringify(data));
-}
-
+/**
+ * Tracks feature usage on the server (DB-backed, can't be bypassed
+ * by clearing localStorage). Free trial limit is enforced in the API
+ * routes; premium users bypass it.
+ */
 export function useUsage(featureKey: FeatureKey) {
-  const { user, isSignedIn } = useAuth();
-  const [usageCount, setUsageCount] = useState<number>(0);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { user, isSignedIn, isLoaded } = useAuth();
+  const [status, setStatus] = useState<UsageStatus | null>(null);
+
+  const refresh = useCallback(async () => {
+    if (!isSignedIn || !user?.id) {
+      setStatus(null);
+      return;
+    }
+    try {
+      const res = await fetch(`/api/usage?feature=${featureKey}`);
+      if (!res.ok) {
+        setStatus(null);
+        return;
+      }
+      setStatus(await res.json());
+    } catch {
+      setStatus(null);
+    }
+  }, [featureKey, isSignedIn, user?.id]);
 
   useEffect(() => {
-    if (isSignedIn && user?.id) {
-      const data = getUsageData(user.id);
-      const raw = data[featureKey] || 0;
-      // Clamp stale data to FREE_TRIALS
-      const clamped = Math.min(raw, FREE_TRIALS);
-      if (clamped !== raw) {
-        const updated = { ...data, [featureKey]: clamped };
-        saveUsageData(user.id, updated);
-      }
-      setUsageCount(clamped);
+    if (isLoaded) {
+      refresh();
     }
-    setIsLoaded(true);
-  }, [isSignedIn, user?.id, featureKey]);
+  }, [isLoaded, refresh]);
 
   const recordUsage = useCallback(() => {
-    if (!user?.id) return;
-    const data = getUsageData(user.id);
-    const current = data[featureKey] || 0;
-    // Cap at FREE_TRIALS so it never goes over
-    if (current >= FREE_TRIALS) return;
-    const updated = { ...data, [featureKey]: current + 1 };
-    saveUsageData(user.id, updated);
-    setUsageCount(current + 1);
-  }, [user?.id, featureKey]);
+    // Usage is recorded server-side by the AI routes after a
+    // successful analysis; refresh so the UI reflects it.
+    refresh();
+  }, [refresh]);
 
-  const canUse = isSignedIn && usageCount < FREE_TRIALS;
-  const isPro = usageCount >= FREE_TRIALS;
+  const usageCount = status?.used ?? 0;
+  const isPremium = status?.isPremium ?? false;
+  const freeTrials = status?.limit ?? 1;
+  const exhausted =
+    isSignedIn && status !== null && !status.canUse && !isPremium;
 
-  return { usageCount, canUse, isPro, isLoaded, recordUsage, freeTrials: FREE_TRIALS };
+  return {
+    usageCount,
+    canUse: isSignedIn && (isPremium || usageCount < freeTrials),
+    isPro: isPremium,
+    isPremium,
+    exhausted,
+    isLoaded: isLoaded && status !== null,
+    recordUsage,
+    refresh,
+    freeTrials,
+  };
 }

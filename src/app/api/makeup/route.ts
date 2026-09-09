@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { createGenAI, generateWithRetry, GEMINI_MODEL } from "@/lib/gemini";
+import { checkUsage, recordUsage } from "@/lib/usage";
 
 const genAI = createGenAI("GEMINI_API_KEY_3");
 
@@ -15,6 +16,18 @@ export async function POST(req: NextRequest) {
     const { image_b64, note } = await req.json();
     if (!image_b64) {
       return new Response(JSON.stringify({ error: "Image required" }), { status: 400 });
+    }
+
+    // Server-side free trial / premium enforcement
+    const usage = await checkUsage(session.user.id, "makeup-recommendations");
+    if (!usage.canUse) {
+      return new Response(
+        JSON.stringify({
+          error: "Free trial used. Upgrade to Elite for unlimited analysis.",
+          upgradeRequired: true,
+        }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     const system = `You are a professional makeup stylist. Analyze the face in the input image and return structured JSON with:
@@ -51,6 +64,9 @@ export async function POST(req: NextRequest) {
 
     const output = result.response.text();
     const analysis = JSON.parse(output);
+
+    // Record usage only after a successful analysis
+    await recordUsage(session.user.id, "makeup-recommendations");
 
     return new Response(JSON.stringify({ analysis }), {
       status: 200,

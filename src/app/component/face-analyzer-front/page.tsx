@@ -2,8 +2,8 @@
 
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import FaceAnalyzer, { FaceAnalysisResult } from "../face-analyzer-func/FaceAnalyzer";
-import FacialAnalysis, { Features } from "../facial-analysis/FacialAnalysis";
+import FaceAnalyzer, { FaceAnalysisResult } from "./FaceAnalyzer";
+import FacialAnalysis, { Features } from "./FacialAnalysis";
 import { Droplet, Smile, Sun, Camera, RefreshCw, Palette, Sparkles, Activity, Loader2, Crown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useUsage } from "@/hooks/use-usage";
@@ -17,7 +17,7 @@ export default function FaceAnalyzerPage() {
   const [showColors, setShowColors] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
-  const { canUse, isPro, isLoaded, recordUsage } = useUsage("face-analyzer-front");
+  const { canUse, isPro, exhausted, isLoaded, recordUsage } = useUsage("face-analyzer-front");
   const { isSignedIn } = useAuth();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
@@ -87,14 +87,14 @@ export default function FaceAnalyzerPage() {
                     <Camera className="h-10 w-10" />
                   </div>
                   <button
-                    onClick={isPro ? () => setShowUpgrade(true) : handleEnableCamera}
+                    onClick={exhausted ? () => setShowUpgrade(true) : handleEnableCamera}
                     className={`px-10 py-4 font-black rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 ${
-                      isPro
+                      exhausted
                         ? "bg-brand-dark text-white hover:bg-brand-teal shadow-brand-dark/20"
                         : "bg-brand-teal text-brand-dark hover:bg-white shadow-brand-teal/20"
                     }`}
                   >
-                    {isPro ? (
+                    {exhausted ? (
                       <span className="flex items-center gap-2">
                         <Crown className="h-5 w-5" /> Upgrade to Pro
                       </span>

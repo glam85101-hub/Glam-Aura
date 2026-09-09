@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 
-import { Features } from "../facial-analysis/FacialAnalysis";
+import { Features } from "./FacialAnalysis";
 export type FaceAnalysisResult = {
   skinColor: string;
   tone: string;
@@ -26,26 +26,27 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult, onError,
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Capture frame and send to Gemini API
-  const captureFrame = async () => {
-    if (!videoRef.current || !canvasRef.current) return;
+  // Capture frame and send to Gemini API.
+  // Returns false when the loop should stop (e.g. trial exhausted).
+  const captureFrame = async (): Promise<boolean> => {
+    if (!videoRef.current || !canvasRef.current) return true;
     const canvas = canvasRef.current;
     const video = videoRef.current;
     const scale = Math.min(1, 640 / video.videoWidth);
     canvas.width = video.videoWidth * scale;
     canvas.height = video.videoHeight * scale;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) return true;
 
     // Ensure video has loaded
-    if (canvas.width === 0 || canvas.height === 0) return;
+    if (canvas.width === 0 || canvas.height === 0) return true;
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const frameB64 = canvas.toDataURL("image/jpeg").split(",")[1];
 
     if (!frameB64) {
       if (onError) onError("Failed to capture frame");
-      return;
+      return true;
     }
 
     try {
@@ -58,12 +59,15 @@ const FaceAnalyzer: React.FC<FaceAnalyzerProps> = ({ running, onResult, onError,
       const data = await res.json();
       if (!res.ok) {
         if (onError) onError(data.error || "Analysis failed");
-        return;
+        // 403 = free trial exhausted server-side → stop polling
+        return res.status !== 403;
       }
       if (data.analysis) onResult(data.analysis); // Gemini result
+      return true;
     } catch (err: any) {
       console.error("Gemini API error:", err);
       if (onError) onError(err.message || "Connection error");
+      return true;
     }
   };
 
@@ -96,8 +100,9 @@ useEffect(() => {
         if (!running) return;
         
         try {
-          await captureFrame();
+          const shouldContinue = await captureFrame();
           failureCount = 0; // Reset on success
+          if (!shouldContinue) return; // Server signaled stop (trial exhausted)
         } catch (err) {
           failureCount++;
           console.warn(`Capture failed (${failureCount}/${maxFailures}):`, err);

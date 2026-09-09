@@ -234,15 +234,9 @@ export default function Features() {
               Upcoming
             </div>
             <h2 className="text-3xl font-bold mb-4">Facial Landmark Testing</h2>
-            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               We are currently testing advanced facial landmark detection to provide even more precise styling advice.
             </p>
-            <Link 
-              href="/component/facial-analysis"
-              className="px-8 py-4 bg-brand-dark text-white rounded-2xl font-bold hover:bg-brand-teal transition-all inline-block"
-            >
-              View Test Results
-            </Link>
           </div>
         </div>
       </div>
