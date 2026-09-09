@@ -84,7 +84,7 @@ A **Next.js** web app that analyzes facial features and provides personalized re
 
 ---
 
-## 📦 Packages
+## Packages
 - `better-auth` – auth & session management
 - `@google/generative-ai` – Gemini AI integration
 - `@prisma/client` – Prisma ORM client
