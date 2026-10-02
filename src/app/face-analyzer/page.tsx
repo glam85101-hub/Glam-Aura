@@ -195,7 +195,7 @@ export default function FaceAnalyzerPage() {
 
                 {result.description && (
                   <div className="p-5 rounded-2xl bg-brand-teal/5 border border-brand-teal/10 italic text-sm text-gray-300 leading-relaxed">
-                    "{result.description}"
+                    &ldquo;{result.description}&rdquo;
                   </div>
                 )}
 

@@ -1,10 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useAuth } from "@/components/AuthProvider";
+import AuthModal from "@/components/AuthModal";
 
 const Pricing: React.FC = () => {
+  const { isLoaded, isSignedIn } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
   const plans = [
     {
       name: "ESSENTIAL",
@@ -32,6 +39,20 @@ const Pricing: React.FC = () => {
   ];
 
   const handleCheckout = async (variantId: string) => {
+    if (!variantId) {
+      setCheckoutError("Upgrade is unavailable right now. Please try again later.");
+      return;
+    }
+
+    // Checkout must be tied to an account so the webhook can grant Elite access
+    if (isLoaded && !isSignedIn) {
+      setCheckoutError(null);
+      setShowAuth(true);
+      return;
+    }
+
+    setCheckoutError(null);
+    setCheckingOut(true);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -39,18 +60,31 @@ const Pricing: React.FC = () => {
         body: JSON.stringify({ variantId }),
       });
 
+      if (res.status === 401) {
+        // Session expired — ask the user to sign in first
+        setShowAuth(true);
+        return;
+      }
+
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error("API error:", errorText);
+        const data = await res.json().catch(() => null);
+        setCheckoutError(
+          data?.error || "Could not start checkout. Please try again."
+        );
         return;
       }
 
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+        return;
       }
+      setCheckoutError("Could not start checkout. Please try again.");
     } catch (err) {
       console.error("Lemon Squeezy checkout error:", err);
+      setCheckoutError("Something went wrong. Please check your connection and try again.");
+    } finally {
+      setCheckingOut(false);
     }
   };
 
@@ -133,12 +167,20 @@ const Pricing: React.FC = () => {
                   Get Started Free
                 </Link>
               ) : (
-                <button
-                  onClick={() => handleCheckout(plan.variantId || "")}
-                  className="w-full py-4 sm:py-5 rounded-2xl font-black text-brand-dark bg-brand-mint hover:bg-white transition-all shadow-lg shadow-brand-mint/30 active:scale-95"
-                >
-                  Upgrade to Elite
-                </button>
+                <>
+                  <button
+                    onClick={() => handleCheckout(plan.variantId || "")}
+                    disabled={checkingOut}
+                    className="w-full py-4 sm:py-5 rounded-2xl font-black text-brand-dark bg-brand-mint hover:bg-white transition-all shadow-lg shadow-brand-mint/30 active:scale-95 disabled:opacity-60 disabled:cursor-wait disabled:active:scale-100"
+                  >
+                    {checkingOut ? "Redirecting to checkout…" : "Upgrade to Elite"}
+                  </button>
+                  {checkoutError && (
+                    <p className="mt-4 text-sm text-center font-medium text-red-300">
+                      {checkoutError}
+                    </p>
+                  )}
+                </>
               )}
 
               <p className={`mt-6 text-sm text-center font-medium ${plan.popular ? 'text-gray-500' : 'text-gray-400'}`}>
@@ -150,6 +192,8 @@ const Pricing: React.FC = () => {
           ))}
         </div>
       </main>
+
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
     </div>
   );
 };

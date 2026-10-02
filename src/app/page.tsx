@@ -6,6 +6,7 @@ import "aos/dist/aos.css";
 import { useEffect } from "react";
 
 import Blog from "../components/Blog";
+import DemoVideo from "../components/DemoVideo";
 import About from "../app/about/page";
 import HomePage from "../components/Home";
 import FAQ from "./faq/page";
@@ -27,6 +28,7 @@ export default function Home() {
     <div> 
  
   <HomePage />
+  <DemoVideo />
   <Pallete/>
  <About />
  <Outfit/>

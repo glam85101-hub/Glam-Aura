@@ -43,3 +43,6 @@ next-env.d.ts
 /.clerk/
 
 /src/generated/prisma
+
+# Local backup of the original 178MB demo video (GitHub rejects >100MB)
+glam-aura-demo-original.mp4

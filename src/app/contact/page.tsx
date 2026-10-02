@@ -55,10 +55,10 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 sm:mb-6"
         >
-          Let's Start a <span className="text-brand-teal italic">Conversation</span>
+          Let&apos;s Start a <span className="text-brand-teal italic">Conversation</span>
         </motion.h1>
         <p className="text-base sm:text-xl text-gray-600 font-medium">
-          Have a question about our AI styling or want to partner with us? We're here to help you elevate your aesthetic.
+          Have a question about our AI styling or want to partner with us? We&apos;re here to help you elevate your aesthetic.
         </p>
       </header>
 
@@ -209,7 +209,7 @@ export default function Contact() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 text-center bg-green-50 text-green-700 border border-green-100 px-6 py-4 rounded-2xl font-bold"
                 >
-                  ✨ Message received! We'll be in touch shortly.
+                  ✨ Message received! We&apos;ll be in touch shortly.
                 </motion.p>
               )}
               {result === 'Error' && (

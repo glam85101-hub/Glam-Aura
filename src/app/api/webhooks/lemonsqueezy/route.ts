@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { getPrisma } from "@/lib/prisma";
 
-// This webhook handles Lemon Squeezy events for production
-// Make sure to configure the webhook URL in your Lemon Squeezy dashboard:
-// https://yourdomain.com/api/webhooks/lemonsqueezy
+// Lemon Squeezy webhook — configure in your Lemon Squeezy dashboard:
+//   Settings → Webhooks → https://<your-domain>/api/webhooks/lemonsqueezy
 //
-// Events to handle:
-// - subscription_created: Grant access to premium features
-// - subscription_updated: Update subscription details
-// - subscription_expired/subscription_cancelled: Revoke access
-// - order_created: Process one-time payments
+// Events handled:
+// - order_created: one-time Elite payment → grant premium
+// - order_refunded: refund → revoke premium
+// - subscription_created/updated: grant/keep premium while active
+// - subscription_expired/cancelled: revoke premium
+
+const ACTIVE_SUBSCRIPTION_STATUSES = ["on_trial", "active"];
+const ENDED_SUBSCRIPTION_STATUSES = ["cancelled", "expired", "paused"];
 
 export async function POST(req: Request) {
   try {
@@ -26,37 +29,44 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verify HMAC signature
+    // Verify HMAC signature (compare in constant time)
     const expectedSignature = crypto
       .createHmac("sha256", secret)
       .update(payload)
       .digest("hex");
 
-    if (signature !== expectedSignature) {
+    const signatureBuf = Buffer.from(signature, "hex");
+    const expectedBuf = Buffer.from(expectedSignature, "hex");
+    if (
+      signatureBuf.length !== expectedBuf.length ||
+      !crypto.timingSafeEqual(signatureBuf, expectedBuf)
+    ) {
       console.error("Invalid webhook signature received");
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const event = JSON.parse(payload);
     const eventName = event.meta?.event_name;
-    const eventData = event.data;
 
     console.log(`[Lemon Squeezy Webhook] Event: ${eventName}`);
 
     // Handle different event types
     switch (eventName) {
       case "subscription_created":
-        await handleSubscriptionCreated(eventData);
+        await handleSubscriptionCreated(event);
         break;
       case "subscription_updated":
-        await handleSubscriptionUpdated(eventData);
+        await handleSubscriptionUpdated(event);
         break;
       case "subscription_expired":
       case "subscription_cancelled":
-        await handleSubscriptionEnded(eventData);
+        await handleSubscriptionEnded(event);
         break;
       case "order_created":
-        await handleOrderCreated(eventData);
+        await handleOrderCreated(event);
+        break;
+      case "order_refunded":
+        await handleOrderRefunded(event);
         break;
       default:
         console.log(`[Lemon Squeezy Webhook] Unhandled event: ${eventName}`);
@@ -72,70 +82,146 @@ export async function POST(req: Request) {
   }
 }
 
-// Handle subscription creation - grant user access
-async function handleSubscriptionCreated(data: any) {
-  const attributes = data?.attributes;
-  const userId = attributes?.custom_data?.user_id;
-  const customerEmail = attributes?.customer_email;
-  const subscriptionId = data?.id;
+/**
+ * Resolve the app user for an event:
+ * 1. meta.custom_data.user_id (set via checkout_data.custom at checkout)
+ * 2. fallback: customer email on the event
+ */
+async function resolveUser(event: any) {
+  const prisma = getPrisma();
 
-  console.log("[Subscription Created]", {
-    subscriptionId,
-    userId,
-    customerEmail,
+  const userId = event?.meta?.custom_data?.user_id;
+  if (userId) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (user) return user;
+  }
+
+  const email = event?.data?.attributes?.customer_email;
+  if (email) {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (user) return user;
+  }
+
+  return null;
+}
+
+/** Flip a user's premium flag, stamping premiumSince on grant. */
+async function setPremium(userId: string, premium: boolean) {
+  const prisma = getPrisma();
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) return;
+
+  if (premium && !user.isPremium) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isPremium: true, premiumSince: new Date() },
+    });
+    console.log(`[Lemon Squeezy Webhook] Premium granted to ${user.email}`);
+  } else if (!premium && user.isPremium) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isPremium: false, premiumSince: null },
+    });
+    console.log(`[Lemon Squeezy Webhook] Premium revoked for ${user.email}`);
+  } else {
+    console.log(
+      `[Lemon Squeezy Webhook] No change for ${user.email} (isPremium=${user.isPremium})`
+    );
+  }
+}
+
+function warnNoUser(event: any) {
+  console.warn("[Lemon Squeezy Webhook] Could not match a user for event", {
+    eventName: event?.meta?.event_name,
+    customData: event?.meta?.custom_data,
+    customerEmail: event?.data?.attributes?.customer_email,
+  });
+}
+
+// Handle subscription creation - grant user access
+async function handleSubscriptionCreated(event: any) {
+  const attributes = event?.data?.attributes;
+  const user = await resolveUser(event);
+
+  console.log("[Lemon Squeezy Webhook] subscription_created", {
+    subscriptionId: event?.data?.id,
+    userId: user?.id,
+    customerEmail: attributes?.customer_email,
     status: attributes?.status,
   });
 
-  // TODO: Add your database logic here
-  // Example: Update user's subscription status in your database
-  // await db.users.update({ where: { id: userId }, data: { isPremium: true, subscriptionId } });
+  if (!user) return warnNoUser(event);
+  if (ACTIVE_SUBSCRIPTION_STATUSES.includes(attributes?.status)) {
+    await setPremium(user.id, true);
+  }
 }
 
 // Handle subscription updates
-async function handleSubscriptionUpdated(data: any) {
-  const attributes = data?.attributes;
-  const subscriptionId = data?.id;
+async function handleSubscriptionUpdated(event: any) {
+  const attributes = event?.data?.attributes;
+  const status = attributes?.status;
+  const user = await resolveUser(event);
 
-  console.log("[Subscription Updated]", {
-    subscriptionId,
-    status: attributes?.status,
+  console.log("[Lemon Squeezy Webhook] subscription_updated", {
+    subscriptionId: event?.data?.id,
+    userId: user?.id,
+    status,
     renewsAt: attributes?.renews_at,
   });
 
-  // TODO: Add your database logic here
-  // Example: Update subscription details in your database
+  if (!user) return warnNoUser(event);
+  if (ACTIVE_SUBSCRIPTION_STATUSES.includes(status)) {
+    await setPremium(user.id, true);
+  } else if (ENDED_SUBSCRIPTION_STATUSES.includes(status)) {
+    await setPremium(user.id, false);
+  }
 }
 
 // Handle subscription expiration or cancellation - revoke access
-async function handleSubscriptionEnded(data: any) {
-  const attributes = data?.attributes;
-  const userId = attributes?.custom_data?.user_id;
-  const customerEmail = attributes?.customer_email;
-  const subscriptionId = data?.id;
+async function handleSubscriptionEnded(event: any) {
+  const attributes = event?.data?.attributes;
+  const user = await resolveUser(event);
 
-  console.log("[Subscription Ended]", {
-    subscriptionId,
-    userId,
-    customerEmail,
+  console.log("[Lemon Squeezy Webhook] subscription_ended", {
+    subscriptionId: event?.data?.id,
+    userId: user?.id,
+    customerEmail: attributes?.customer_email,
     status: attributes?.status,
   });
 
-  // TODO: Add your database logic here
-  // Example: Update user's subscription status to revoke access
-  // await db.users.update({ where: { id: userId }, data: { isPremium: false } });
+  if (!user) return warnNoUser(event);
+  await setPremium(user.id, false);
 }
 
-// Handle one-time order creation
-async function handleOrderCreated(data: any) {
-  const attributes = data?.attributes;
-  const orderId = data?.id;
+// Handle one-time order creation (Elite lifetime purchase)
+async function handleOrderCreated(event: any) {
+  const attributes = event?.data?.attributes;
+  const user = await resolveUser(event);
 
-  console.log("[Order Created]", {
-    orderId,
+  console.log("[Lemon Squeezy Webhook] order_created", {
+    orderId: event?.data?.id,
+    userId: user?.id,
     total: attributes?.total,
     status: attributes?.status,
   });
 
-  // TODO: Add your database logic here
-  // Example: Record the order and grant access
+  if (!user) return warnNoUser(event);
+  if (attributes?.status === "paid") {
+    await setPremium(user.id, true);
+  }
+}
+
+// Handle refunded orders - revoke premium
+async function handleOrderRefunded(event: any) {
+  const attributes = event?.data?.attributes;
+  const user = await resolveUser(event);
+
+  console.log("[Lemon Squeezy Webhook] order_refunded", {
+    orderId: event?.data?.id,
+    userId: user?.id,
+    status: attributes?.status,
+  });
+
+  if (!user) return warnNoUser(event);
+  await setPremium(user.id, false);
 }

@@ -8,11 +8,13 @@ export async function POST(req: Request) {
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
     // Validate environment variables
     const apiKey = process.env.LEMONSQUEEZY_API_KEY;
     const storeId = process.env.LEMONSQUEEZY_STORE_ID;
+    const eliteVariantId = process.env.LEMONSQUEEZY_PRO_VARIANT_ID;
 
-    if (!apiKey || !storeId) {
+    if (!apiKey || !storeId || !eliteVariantId) {
       console.error("Missing Lemon Squeezy environment variables");
       return NextResponse.json(
         { error: "Payment configuration error" },
@@ -20,7 +22,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { variantId } = await req.json();
+    const body = await req.json().catch(() => ({ variantId: undefined }));
+    const { variantId } = body;
 
     if (!variantId) {
       return NextResponse.json({ error: "Missing variantId" }, { status: 400 });
@@ -33,6 +36,14 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    // Only allow the configured Elite variant — never trust arbitrary IDs
+    if (variantId !== eliteVariantId) {
+      return NextResponse.json({ error: "Invalid variantId" }, { status: 400 });
+    }
+
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com";
 
     const response = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
       method: "POST",
@@ -49,8 +60,16 @@ export async function POST(req: Request) {
               embed: false,
               logo: true,
             },
+            // Sent to Lemon Squeezy with the order and echoed back in
+            // webhooks as meta.custom_data.user_id — used to grant premium.
+            checkout_data: {
+              email: session.user.email,
+              custom: {
+                user_id: session.user.id,
+              },
+            },
             product_options: {
-              redirect_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com"}/success`,
+              redirect_url: `${baseUrl}/success`,
             },
           },
           relationships: {

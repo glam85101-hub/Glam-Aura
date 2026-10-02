@@ -247,7 +247,7 @@ export default function OutfitAnalyzerPage() {
                   </div>
                 </div>
 
-                <p className="text-gray-300 text-lg leading-relaxed italic">"{analysis.summary}"</p>
+                <p className="text-gray-300 text-lg leading-relaxed italic">&ldquo;{analysis.summary}&rdquo;</p>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="p-6 rounded-3xl bg-white/5 border border-white/10">

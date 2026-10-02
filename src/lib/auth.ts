@@ -6,7 +6,6 @@ let prisma: any = null;
 function getPrisma() {
   if (!prisma) {
     // Dynamic require to avoid build-time evaluation
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const PrismaClient = require("@prisma/client").PrismaClient;
     const g = globalThis as any;
     g.__prisma = g.__prisma || new PrismaClient();
