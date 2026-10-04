@@ -7,6 +7,8 @@ import {
   Shirt,
   Palette,
   ArrowRight,
+  FileText,
+  Download,
 } from "lucide-react";
 
 const tools = [
@@ -301,6 +303,40 @@ export default function About() {
               beauty and style.&rdquo;
             </p>
           </div>
+        </div>
+
+        {/* ===== BRAND DECK (PDF) ===== */}
+        <div
+          className="relative flex flex-col sm:flex-row items-center gap-6 sm:gap-10 bg-white rounded-[2rem] sm:rounded-[3rem] border border-brand-teal/10 shadow-lg shadow-brand-teal/5 px-6 sm:px-10 lg:px-14 py-9 sm:py-11 mb-12 sm:mb-16 overflow-hidden"
+          data-aos="fade-up"
+        >
+          <div className="absolute -bottom-20 -left-16 w-56 h-56 bg-brand-mint/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative shrink-0 w-14 h-14 rounded-2xl bg-brand-teal/10 text-brand-teal flex items-center justify-center">
+            <FileText className="w-7 h-7" strokeWidth={1.8} />
+          </div>
+          <div className="relative flex-1 text-center sm:text-left">
+            <p className="text-brand-teal font-black text-xs uppercase tracking-widest mb-1">
+              Brand Deck
+            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-brand-dark mb-1.5">
+              The Glam Aura Story, in One PDF
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+              Our mission, the three AI tools and the vision behind the platform
+              — a shareable overview for partners, press and curious minds.
+            </p>
+          </div>
+          <a
+            href="/GlamAura.pdf"
+            download="GlamAura-Brand-Deck.pdf"
+            className="relative shrink-0 inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white rounded-full font-bold text-sm sm:text-base shadow-lg shadow-brand-dark/10 hover:bg-brand-teal transition-all transform hover:-translate-y-0.5"
+          >
+            <Download className="w-4 h-4" />
+            Download PDF
+            <span className="text-brand-mint font-bold text-xs sm:text-sm">
+              · 28 MB
+            </span>
+          </a>
         </div>
 
         {/* ===== CLOSING CTA ===== */}

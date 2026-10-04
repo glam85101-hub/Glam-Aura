@@ -112,9 +112,9 @@ export default function OutfitAnalyzerPage() {
 
   return (
     <main className="min-h-screen bg-brand-dark text-white selection:bg-brand-teal/30">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
         {/* HEADER */}
-        <header className="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <header className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto" data-aos="fade-up">
           <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest">
             Style AI
           </div>
@@ -122,7 +122,7 @@ export default function OutfitAnalyzerPage() {
             initial={isMobile ? {} : { opacity: 0, y: -8 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.4 }} 
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
+            className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 sm:mb-6"
           >
             Outfit <span className="text-brand-teal italic">Analyzer</span>
           </motion.h1>
@@ -131,12 +131,12 @@ export default function OutfitAnalyzerPage() {
           </p>
         </header>
 
-        <section className="grid lg:grid-cols-2 gap-12 items-start">
+        <section className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* LEFT: Upload */}
           <motion.div 
             initial={isMobile ? {} : { opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl relative overflow-hidden group" 
+            className="rounded-[2rem] sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 shadow-2xl relative overflow-hidden group" 
             onDragOver={(e) => e.preventDefault()} 
             onDrop={onDrop}
           >
@@ -223,7 +223,7 @@ export default function OutfitAnalyzerPage() {
           <motion.div 
             initial={isMobile ? {} : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl min-h-[600px] flex flex-col"
+            className="rounded-[2rem] sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 shadow-2xl min-h-[360px] sm:min-h-[600px] flex flex-col"
           >
             <div className="flex items-center gap-3 text-brand-teal font-bold text-sm uppercase tracking-widest mb-8">
               <Palette className="h-5 w-5" /> Style Verdict
@@ -239,8 +239,8 @@ export default function OutfitAnalyzerPage() {
               </div>
             ) : (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="flex items-center justify-between p-6 rounded-[2rem] bg-brand-teal/10 border border-brand-teal/20">
-                  <span className="text-2xl font-black text-white">{analysis.verdict}</span>
+                <div className="flex flex-wrap items-center justify-between gap-4 p-5 sm:p-6 rounded-[2rem] bg-brand-teal/10 border border-brand-teal/20">
+                  <span className="text-xl sm:text-2xl font-black text-white">{analysis.verdict}</span>
                   <div className="flex flex-col items-end">
                     <span className="text-3xl font-black text-brand-teal">{analysis.score}</span>
                     <span className="text-[10px] uppercase font-black text-gray-500 tracking-tighter">Style Score</span>

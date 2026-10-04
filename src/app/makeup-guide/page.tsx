@@ -120,9 +120,9 @@ export default function MakeupAnalyzerPage() {
 
   return (
     <main className="min-h-screen bg-brand-dark text-white selection:bg-brand-teal/30">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
         {/* HEADER */}
-        <header className="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <header className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto" data-aos="fade-up">
           <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest">
             AI Stylist
           </div>
@@ -130,7 +130,7 @@ export default function MakeupAnalyzerPage() {
             initial={isMobile ? {} : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
+            className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 sm:mb-6"
           >
             Makeup <span className="text-brand-teal italic">Recommendations</span>
           </motion.h1>
@@ -139,12 +139,12 @@ export default function MakeupAnalyzerPage() {
           </p>
         </header>
 
-        <section className="grid lg:grid-cols-2 gap-12 items-start">
+        <section className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* LEFT: Upload & Controls */}
           <motion.div 
             initial={isMobile ? {} : { opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl relative overflow-hidden group"
+            className="rounded-[2rem] sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 shadow-2xl relative overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-teal/10 rounded-full blur-3xl -z-10 group-hover:bg-brand-teal/20 transition-colors" />
 
@@ -241,7 +241,7 @@ export default function MakeupAnalyzerPage() {
           <motion.div 
             initial={isMobile ? {} : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl min-h-[500px] flex flex-col"
+            className="rounded-[2rem] sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 shadow-2xl min-h-[360px] sm:min-h-[500px] flex flex-col"
           >
             <div className="flex items-center gap-3 text-brand-teal font-bold text-sm uppercase tracking-widest mb-8">
               <Palette className="h-5 w-5" /> AI Insight
@@ -342,7 +342,7 @@ export default function MakeupAnalyzerPage() {
 
         {/* Sign-in prompt */}
         {isLoaded && !isSignedIn && (
-          <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8">
+          <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8">
             <p className="text-gray-400 font-medium mb-4">Sign in to use AI features and track your free trials</p>
             <button onClick={() => setShowAuth(true)} className="px-8 py-4 bg-brand-teal text-brand-dark rounded-2xl font-black hover:bg-white transition-all">
               Sign In

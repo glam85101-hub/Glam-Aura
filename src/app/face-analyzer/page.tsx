@@ -54,9 +54,9 @@ export default function FaceAnalyzerPage() {
 
   return (
     <main className="min-h-screen bg-brand-dark text-white selection:bg-brand-teal/30">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
         {/* HEADER */}
-        <header className="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <header className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto" data-aos="fade-up">
           <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest">
             Neural Scan
           </div>
@@ -64,7 +64,7 @@ export default function FaceAnalyzerPage() {
             initial={isMobile ? {} : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
+            className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 sm:mb-6"
           >
             Facial Feature <span className="text-brand-teal italic">Analyzer</span>
           </motion.h1>
@@ -73,13 +73,13 @@ export default function FaceAnalyzerPage() {
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-3 gap-12 items-start">
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           {/* LEFT/CENTER: Camera Section */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div 
               initial={isMobile ? {} : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="relative aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 bg-black group"
+              className="relative aspect-[4/3] sm:aspect-video rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 bg-black group"
             >
               {!cameraEnabled ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/5 backdrop-blur-sm">
@@ -118,7 +118,7 @@ export default function FaceAnalyzerPage() {
                   />
 
                   {/* Overlay Controls */}
-                  <div className="absolute top-6 left-6 flex items-center gap-3">
+                  <div className="absolute top-3 left-3 sm:top-6 sm:left-6 flex items-center gap-3">
                     <div className="px-4 py-2 rounded-full bg-brand-dark/60 backdrop-blur-md border border-white/10 flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-brand-teal animate-ping" />
                       <span className="text-xs font-black uppercase tracking-widest text-white">Live Processing</span>
@@ -127,7 +127,7 @@ export default function FaceAnalyzerPage() {
 
                   <button
                     onClick={handleDisableCamera}
-                    className="absolute bottom-6 right-6 px-6 py-3 bg-red-500/80 backdrop-blur-md text-white font-bold rounded-xl shadow-lg hover:bg-red-500 transition-all z-20"
+                    className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 px-4 py-2.5 sm:px-6 sm:py-3 bg-red-500/80 backdrop-blur-md text-white text-sm sm:text-base font-bold rounded-xl shadow-lg hover:bg-red-500 transition-all z-20"
                   >
                     Stop Scanner
                   </button>
@@ -163,7 +163,7 @@ export default function FaceAnalyzerPage() {
           <motion.div 
             initial={isMobile ? {} : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-8 shadow-2xl h-full flex flex-col"
+            className="rounded-[2rem] sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 shadow-2xl h-full flex flex-col"
           >
             <div className="flex items-center gap-3 text-brand-teal font-bold text-sm uppercase tracking-widest mb-8">
               <Activity className="h-5 w-5" /> Live Data
@@ -251,7 +251,7 @@ export default function FaceAnalyzerPage() {
 
         {/* Sign-in prompt */}
         {isLoaded && !isSignedIn && (
-          <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8">
+          <div className="mt-12 max-w-lg mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8">
             <p className="text-gray-400 font-medium mb-4">Sign in to use AI features and track your free trials</p>
             <button onClick={() => setShowAuth(true)} className="px-8 py-4 bg-brand-teal text-brand-dark rounded-2xl font-black hover:bg-white transition-all">
               Sign In
